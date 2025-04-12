@@ -5,16 +5,19 @@ import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { FiPhoneCall, FiSend } from "react-icons/fi";
 import { IoIosClose } from "react-icons/io";
 import { FaRegUserCircle } from "react-icons/fa";
-// Import your FAQ JSON file (adjust the path as needed)
-import faqData from "../../faq.json";
+import OpenAI from "openai";
 
-interface FAQItem {
-  intrebare: string;
-  raspuns: string;
-}
-
-// Cast the imported JSON to an array of FAQItem
-const faq = faqData as FAQItem[];
+// Inițializează clientul OpenAI cu setările tale
+const openai = new OpenAI({
+  baseURL: "https://openrouter.ai/api/v1",
+  apiKey:
+    "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",
+  dangerouslyAllowBrowser: true,
+  defaultHeaders: {
+    "HTTP-Referer": "https://igortacu.com", // Înlocuiește cu URL-ul site-ului tău, dacă este necesar.
+    "X-Title": "EasyMed", // Înlocuiește cu numele site-ului tău, dacă este necesar.
+  },
+});
 
 type Message = {
   type: "assistant" | "user";
@@ -26,59 +29,68 @@ export default function Hero() {
   const [messages, setMessages] = useState<Message[]>([
     {
       type: "assistant",
-      text: "Bună ziua, cu ce vă putem ajuta?",
+      text: "Bună ziua, cum vă putem ajuta?",
     },
   ]);
   const [userInput, setUserInput] = useState("");
 
-  // Function that checks if the user input exactly matches any FAQ question
-  const matchFAQ = (input: string): string | null => {
-    // Normalize user input
-    const normalizedInput = input.toLowerCase().trim();
-    // Find an FAQ entry where the question matches exactly
-    const entry = faq.find(
-      (item) => item.intrebare.toLowerCase().trim() === normalizedInput
-    );
-    return entry ? entry.raspuns : null;
-  };
+  const handleSend = async () => {
+    if (!userInput.trim()) return; // Previne trimiterea mesajelor goale
 
-  // Updated send handler
-  const handleSend = () => {
-    if (!userInput.trim()) return; // Do not send empty messages
-
-    // Append the user's message to the conversation
-    setMessages((prev) => [...prev, { type: "user", text: userInput }]);
-
-    // Look for an exact FAQ match
-    const matchedAnswer = matchFAQ(userInput);
-    // Clear the input immediately
+    const currentMessage = userInput;
+    setMessages((prev) => [...prev, { type: "user", text: currentMessage }]);
     setUserInput("");
 
-    // Simulate a delay before showing the assistant's answer
-    setTimeout(() => {
-      if (matchedAnswer) {
-        setMessages((prev) => [
-          ...prev,
-          { type: "assistant", text: matchedAnswer },
-        ]);
-      } else {
-        // Fallback answer if no match is found
-        setMessages((prev) => [
-          ...prev,
+    try {
+      // Apel către API-ul OpenRouter prin intermediul clientului OpenAI,
+      // cu un mesaj de sistem care forțează răspunsul în limba română și doar text simplu, fără formatare.
+      const completion = await openai.chat.completions.create({
+        model: "deepseek/deepseek-r1-zero:free",
+        messages: [
           {
-            type: "assistant",
-            text: "Ne pare rău, nu am găsit informații relevante.",
+            role: "system",
+            content:
+              "Te rog să oferi un răspuns super scurt in limba romana, organizat în bullet points simple. Fiecare punct trebuie să înceapă cu '-' urmat de un spațiu. Folosește doar text simplu, fără formatare, HTML, markup sau caractere speciale.",
           },
-        ]);
-      }
-    }, 600);
+          {
+            role: "user",
+            content: currentMessage,
+          },
+        ],
+      });
+
+      // Extrage răspunsul din structura de date primită
+      const answer =
+        completion &&
+        completion.choices &&
+        completion.choices[0] &&
+        completion.choices[0].message &&
+        completion.choices[0].message.content
+          ? completion.choices[0].message.content
+          : "Ne pare rău, nu am găsit informații relevante.";
+
+      // Adaugă imediat răspunsul asistentului
+      setMessages((prev) => [
+        ...prev,
+        { type: "assistant", text: answer },
+      ]);
+    } catch (error) {
+      console.error("Eroare la apelul API:", error);
+      setMessages((prev) => [
+        ...prev,
+        {
+          type: "assistant",
+          text: "Ne pare rău, a apărut o eroare la procesarea cererii.",
+        },
+      ]);
+    }
   };
 
   return (
     <div className="min-h-screen w-full bg-[#B1D6FF] flex flex-col items-center relative">
-      {/* Hero Section */}
+      {/* Secțiunea principală (Hero Section) */}
       <div className="relative w-[90%] max-w-8xl bg-white rounded-[3.25vh] -mt-19 mb-8 h-[95vh] flex flex-col md:flex-row">
-        {/* Left half: Text + Button */}
+        {/* Partea stângă: Text + Buton */}
         <div className="w-full md:w-1/2 flex flex-col justify-center p-8">
           <h1 className="text-7xl font-bold text-[#0077FF] mb-6 ml-6 leading-[1.2]">
             Sănătatea voastră este prioritatea noastră
@@ -88,7 +100,7 @@ export default function Hero() {
           </button>
         </div>
 
-        {/* Right half: Lottie animation */}
+        {/* Partea dreaptă: Animație Lottie */}
         <div className="w-full md:w-1/2 h-full flex items-center justify-center mt-15 mr-20">
           <DotLottieReact
             src="https://lottie.host/8129d2a8-bdf8-4b73-b92d-9550b0795084/5Jr1NePiya.lottie"
@@ -98,7 +110,7 @@ export default function Hero() {
           />
         </div>
 
-        {/* Floating circular phone button */}
+        {/* Buton circular flotant (telefon) */}
         <button
           onClick={() => setShowChat(true)}
           className="border-5 border-[#0077FF] text-black text-5xl w-20 h-20 rounded-full flex items-center justify-center hover:border-[#005ecc] hover:text-[#005ecc] transition-colors absolute bottom-6 right-10"
@@ -107,13 +119,13 @@ export default function Hero() {
         </button>
       </div>
 
-      {/* Chat Panel */}
+      {/* Panoul de chat */}
       {showChat && (
         <div
           className="fixed bottom-20 right-40 w-96 bg-white rounded-2xl shadow-lg overflow-hidden transform transition-transform duration-300"
           style={{ transform: showChat ? "translateY(0)" : "translateY(100%)" }}
         >
-          {/* Chat Header */}
+          {/* Header-ul de chat */}
           <div className="flex justify-between items-center p-3 bg-blue-500 text-white rounded-t-[15px]">
             <p className="flex-1 text-center font-bold">
               Asistența Medicală Online
@@ -124,7 +136,7 @@ export default function Hero() {
             />
           </div>
 
-          {/* Chat Body */}
+          {/* Corpul chatului */}
           <div className="p-4 space-y-4 max-h-64 overflow-y-auto">
             {messages.map((msg, index) => (
               <div
@@ -136,7 +148,7 @@ export default function Hero() {
                 {msg.type === "assistant" && (
                   <img
                     src="/doctor_asistent.jpg"
-                    alt="assistant avatar"
+                    alt="avatar asistent"
                     className="w-10 h-10 rounded-full"
                   />
                 )}
@@ -154,7 +166,7 @@ export default function Hero() {
             ))}
           </div>
 
-          {/* Chat Input Area */}
+          {/* Zona de input pentru chat */}
           <div className="px-4 py-2 border-t flex items-center">
             <textarea
               placeholder="Cu ce vă putem ajuta?"
