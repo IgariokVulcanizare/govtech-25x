@@ -12,7 +12,7 @@ interface Doctor {
 }
 
 const SchedulingPage = () => {
-  // List of cities
+  // Extended list of cities in Moldova
   const cities = [
     'Chișinău',
     'Bălți',
@@ -20,7 +20,12 @@ const SchedulingPage = () => {
     'Orhei',
     'Ungheni',
     'Soroca',
-    'Comrat'
+    'Comrat',
+    'Edineț',
+    'Briceni',
+    'Hîncești',
+    'Căușeni',
+    'Rezina'
   ];
 
   // Hospitals by city
@@ -41,101 +46,52 @@ const SchedulingPage = () => {
     'Orhei': ['Spitalul Raional Orhei', 'Clinica Orhei'],
     'Ungheni': ['Spitalul Raional Ungheni', 'Centrul Medical Ungheni'],
     'Soroca': ['Spitalul Raional Soroca', 'Clinica Soroca'],
-    'Comrat': ['Spitalul Raional Comrat', 'Clinica Comrat']
+    'Comrat': ['Spitalul Raional Comrat', 'Clinica Comrat'],
+    'Edineț': ['Spitalul Raional Edineț', 'Clinica Edineț'],
+    'Briceni': ['Spitalul Raional Briceni'],
+    'Hîncești': ['Spitalul Central Hîncești'],
+    'Căușeni': ['Spitalul Raional Căușeni'],
+    'Rezina': ['Spitalul Raional Rezina']
   };
 
-  // Departments
-  const departments = ['Pediatrie', 'Cardiologie', 'Dermatologie', 'Ortopedie'];
+  // Extended departments list
+  const departments = [
+    'Pediatrie',
+    'Cardiologie',
+    'Dermatologie',
+    'Ortopedie',
+    'Ginecologie',
+    'Neurologie',
+    'Psihiatrie',
+    'Oftalmologie',
+    'Oncologie'
+  ];
 
-  // Doctor details per department with image files in the public folder.
+  // Doctor details (unchanged)
   const doctorDetailsByDepartment: { [key: string]: Doctor[] } = {
     Pediatrie: [
-      {
-        name: 'Dr. Tacu Igor',
-        specialty: 'Chirurg pediatru',
-        image: 'igordoc.jpg'
-      },
-      {
-        name: 'Dr. Toderiță Loredana',
-        specialty: 'Asistentă medicală',
-        image: 'loredanadoc.jpg'
-      },
-      {
-        name: 'Dr. Pancenco Ina',
-        specialty: 'Anesteziolog',
-        image: 'inadoc.jpg'
-      },
-      {
-        name: 'Dr. Rusnac Nichita',
-        specialty: 'Terapeut',
-        image: 'nichitadoc.jpg'
-      }
+      { name: 'Dr. Tacu Igor', specialty: 'Chirurg pediatru', image: 'igordoc.jpg' },
+      { name: 'Dr. Toderiță Loredana', specialty: 'Asistentă medicală', image: 'loredanadoc.jpg' },
+      { name: 'Dr. Pancenco Ina', specialty: 'Anesteziolog', image: 'inadoc.jpg' },
+      { name: 'Dr. Rusnac Nichita', specialty: 'Terapeut', image: 'nichitadoc.jpg' }
     ],
     Cardiologie: [
-      {
-        name: 'Dr. Tacu Igor',
-        specialty: 'Cardiolog',
-        image: 'igordoc.jpg'
-      },
-      {
-        name: 'Dr. Toderiță Loredana',
-        specialty: 'Asistentă cardiologie',
-        image: 'loredanadoc.jpg'
-      },
-      {
-        name: 'Dr. Pancenco Ina',
-        specialty: 'Anesteziolog',
-        image: 'inadoc.jpg'
-      },
-      {
-        name: 'Dr. Rusnac Nichita',
-        specialty: 'Terapeut',
-        image: 'nichitadoc.jpg'
-      }
+      { name: 'Dr. Tacu Igor', specialty: 'Cardiolog', image: 'igordoc.jpg' },
+      { name: 'Dr. Toderiță Loredana', specialty: 'Asistentă cardiologie', image: 'loredanadoc.jpg' },
+      { name: 'Dr. Pancenco Ina', specialty: 'Anesteziolog', image: 'inadoc.jpg' },
+      { name: 'Dr. Rusnac Nichita', specialty: 'Terapeut', image: 'nichitadoc.jpg' }
     ],
     Dermatologie: [
-      {
-        name: 'Dr. Tacu Igor',
-        specialty: 'Dermatolog',
-        image: 'igordoc.jpg'
-      },
-      {
-        name: 'Dr. Toderiță Loredana',
-        specialty: 'Asistentă dermatologie',
-        image: 'loredanadoc.jpg'
-      },
-      {
-        name: 'Dr. Pancenco Ina',
-        specialty: 'Anesteziolog',
-        image: 'inadoc.jpg'
-      },
-      {
-        name: 'Dr. Rusnac Nichita',
-        specialty: 'Terapeut',
-        image: 'nichitadoc.jpg'
-      }
+      { name: 'Dr. Tacu Igor', specialty: 'Dermatolog', image: 'igordoc.jpg' },
+      { name: 'Dr. Toderiță Loredana', specialty: 'Asistentă dermatologie', image: 'loredanadoc.jpg' },
+      { name: 'Dr. Pancenco Ina', specialty: 'Anesteziolog', image: 'inadoc.jpg' },
+      { name: 'Dr. Rusnac Nichita', specialty: 'Terapeut', image: 'nichitadoc.jpg' }
     ],
     Ortopedie: [
-      {
-        name: 'Dr. Tacu Igor',
-        specialty: 'Chirurg ortoped',
-        image: 'igordoc.jpg'
-      },
-      {
-        name: 'Dr. Toderiță Loredana',
-        specialty: 'Asistentă ortopedie',
-        image: 'loredanadoc.jpg'
-      },
-      {
-        name: 'Dr. Pancenco Ina',
-        specialty: 'Anesteziolog',
-        image: 'inadoc.jpg'
-      },
-      {
-        name: 'Dr. Rusnac Nichita',
-        specialty: 'Terapeut',
-        image: 'nichitadoc.jpg'
-      }
+      { name: 'Dr. Tacu Igor', specialty: 'Chirurg ortoped', image: 'igordoc.jpg' },
+      { name: 'Dr. Toderiță Loredana', specialty: 'Asistentă ortopedie', image: 'loredanadoc.jpg' },
+      { name: 'Dr. Pancenco Ina', specialty: 'Anesteziolog', image: 'inadoc.jpg' },
+      { name: 'Dr. Rusnac Nichita', specialty: 'Terapeut', image: 'nichitadoc.jpg' }
     ]
   };
 
@@ -147,7 +103,7 @@ const SchedulingPage = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedHour, setSelectedHour] = useState('');
 
-  // Function to get available hours
+  // Available hours logic
   const getAvailableHours = (date: Date): string[] => {
     const now = new Date();
     if (
@@ -167,7 +123,7 @@ const SchedulingPage = () => {
 
   const availableHours = selectedDate ? getAvailableHours(selectedDate) : [];
 
-  // Programare button handler
+  // Handle "Programează"
   const handleProgramare = () => {
     alert(`Programare reușită:
     Oraș: ${selectedCity}
@@ -179,117 +135,133 @@ const SchedulingPage = () => {
   };
 
   return (
-    <div className="p-8 font-sans bg-[#F4F8FF] min-h-screen">
-      {/* Title */}
-      <h1 className="text-3xl font-bold mb-8">Programare medicală</h1>
+    <div className="p-8 font-sans bg-[#B1D6FF] min-h-screen">
+      <div className="bg-white rounded-2xl p-6 shadow-xl transition-all main-card max-w-8xl mx-[20px]">
+        <h1 className="text-3xl font-bold mb-8 text-black">Programare medicală</h1>
 
-      {/* Top selection row: City, Hospital, Department */}
-      <div className="flex gap-4 flex-wrap mb-6">
-        <select
-          className="p-3 w-56 rounded-xl border border-gray-300"
-          value={selectedCity}
-          onChange={(e) => {
-            setSelectedCity(e.target.value);
-            setSelectedHospital('');
-            setSelectedDepartment('');
-            setSelectedDoctor(null);
-            setSelectedDate(null);
-            setSelectedHour('');
-          }}
-        >
-          <option value="">Selectează orașul</option>
-          {cities.map((city) => (
-            <option key={city} value={city}>
-              {city}
-            </option>
-          ))}
-        </select>
+        {/* White card for dropdowns (grid layout) */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          {/* City */}
+          <div className="md:col-span-2">
+            <label className="block text-black font-semibold mb-1">Oraș</label>
+            <select
+              className="p-3 w-full bg-gray-100 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-300 text-black"
+              value={selectedCity}
+              onChange={(e) => {
+                setSelectedCity(e.target.value);
+                setSelectedHospital('');
+                setSelectedDepartment('');
+                setSelectedDoctor(null);
+                setSelectedDate(null);
+                setSelectedHour('');
+              }}
+            >
+              <option value="">Selectează orașul</option>
+              {cities.map((city) => (
+                <option key={city} value={city}>
+                  {city}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        <select
-          className="p-3 w-56 rounded-xl border border-gray-300"
-          value={selectedHospital}
-          onChange={(e) => {
-            setSelectedHospital(e.target.value);
-            setSelectedDepartment('');
-            setSelectedDoctor(null);
-            setSelectedDate(null);
-            setSelectedHour('');
-          }}
-          disabled={!selectedCity}
-        >
-          <option value="">Selectează spitalul</option>
-          {selectedCity &&
-            hospitalsByCity[selectedCity]?.map((hospital) => (
-              <option key={hospital} value={hospital}>
-                {hospital}
-              </option>
-            ))}
-        </select>
+          {/* Hospital */}
+          <div>
+            <label className="block text-black font-semibold mb-1">Spital</label>
+            <select
+              className="p-3 w-full bg-gray-100 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-300 text-black"
+              value={selectedHospital}
+              onChange={(e) => {
+                setSelectedHospital(e.target.value);
+                setSelectedDepartment('');
+                setSelectedDoctor(null);
+                setSelectedDate(null);
+                setSelectedHour('');
+              }}
+              disabled={!selectedCity}
+            >
+              <option value="">Selectează spitalul</option>
+              {selectedCity &&
+                hospitalsByCity[selectedCity]?.map((hospital) => (
+                  <option key={hospital} value={hospital}>
+                    {hospital}
+                  </option>
+                ))}
+            </select>
+          </div>
 
-        <select
-          className="p-3 w-56 rounded-xl border border-gray-300"
-          value={selectedDepartment}
-          onChange={(e) => {
-            setSelectedDepartment(e.target.value);
-            setSelectedDoctor(null);
-            setSelectedDate(null);
-            setSelectedHour('');
-          }}
-          disabled={!selectedHospital}
-        >
-          <option value="">Selectează departamentul</option>
-          {departments.map((dept) => (
-            <option key={dept} value={dept}>
-              {dept}
-            </option>
-          ))}
-        </select>
-      </div>
+          {/* Department */}
+          <div>
+            <label className="block text-black font-semibold mb-1">Departamentul</label>
+            <select
+              className="p-3 w-full bg-gray-100 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-300 text-black"
+              value={selectedDepartment}
+              onChange={(e) => {
+                setSelectedDepartment(e.target.value);
+                setSelectedDoctor(null);
+                setSelectedDate(null);
+                setSelectedHour('');
+              }}
+              disabled={!selectedHospital}
+            >
+              <option value="">Selectează departamentul</option>
+              {departments.map((dept) => (
+                <option key={dept} value={dept}>
+                  {dept}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
 
-      {/* The big white card container */}
-      <div className="bg-white rounded-2xl p-6 shadow-xl transition-all">
-        {/* Doctor cards appear when a department is selected */}
+        {/* Specialists, Calendar, Hours */}
         {selectedDepartment && (
           <>
-            <h2 className="text-xl font-semibold mb-4">Alege un specialist</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-              {doctorDetailsByDepartment[selectedDepartment]?.map((doctor) => (
-                <div
-                  key={doctor.name}
-                  className={`specialist-card cursor-pointer border hover:border-blue-600 rounded-xl p-3 
-                    ${
-                      selectedDoctor?.name === doctor.name
-                        ? 'border-blue-600'
-                        : 'border-gray-200'
-                    }
-                  `}
-                  onClick={() => {
-                    setSelectedDoctor(doctor);
-                    setSelectedDate(null);
-                    setSelectedHour('');
-                  }}
-                >
-                  <img
-                    src={doctor.image}
-                    alt={doctor.name}
-                    className="specialist-image mb-2"
-                  />
-                  <div className="specialist-info">
-                    <h4 className="font-medium text-gray-800">{doctor.name}</h4>
-                    <p className="text-sm text-gray-600">{doctor.specialty}</p>
+            <h2 className="text-xl font-semibold mb-4 text-black pt-[35px]">
+              Alege un specialist
+            </h2>
+
+            {doctorDetailsByDepartment[selectedDepartment] ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                {doctorDetailsByDepartment[selectedDepartment]?.map((doctor) => (
+                  <div
+                    key={doctor.name}
+                    className={`specialist-card cursor-pointer ${
+                      selectedDoctor?.name === doctor.name ? 'specialist-card--active' : ''
+                    }`}
+                    onClick={() => {
+                      setSelectedDoctor(doctor);
+                      setSelectedDate(null);
+                      setSelectedHour('');
+                    }}
+                  >
+                    {/* Round container for a perfectly round image */}
+                    <div className="doctor-avatar">
+                      <img
+                        src={'/' + doctor.image}
+                        alt={doctor.name}
+                        className="specialist-image"
+                      />
+                    </div>
+                    <div className="specialist-info">
+                      <h4 className="text-black">{doctor.name}</h4>
+                      <p className="text-black">{doctor.specialty}</p>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-black">
+                Momentan nu sunt doctori disponibili pentru acest departament.
+              </p>
+            )}
           </>
         )}
 
-        {/* Calendar and Hour selection appear when a doctor is selected */}
         {selectedDoctor && (
           <div className="flex flex-wrap md:flex-nowrap gap-8">
-            {/* LEFT: Calendar with border */}
-            <div className="w-full md:w-1/2">
-              <h2 className="text-xl font-semibold mb-4">Alege data</h2>
+            <div className="w-full md:w-1/2 calendar-wrapper">
+              <h2 className="text-xl font-semibold mb-4 text-black">Alege data</h2>
               <Calendar
                 onChange={(value) => {
                   setSelectedDate(value as Date);
@@ -308,25 +280,21 @@ const SchedulingPage = () => {
                   }
                   return '';
                 }}
-                className="rounded-xl border border-gray-300 calendar-container"
+                className="calendar-container"
               />
             </div>
 
-            {/* RIGHT: Hours and "Programează" button */}
             <div className="w-full md:w-1/2 flex flex-col">
-              <h2 className="text-xl font-semibold mb-4">Ore disponibile</h2>
+              <h2 className="text-xl font-semibold mb-4 text-black">Ore disponibile</h2>
               {selectedDate && availableHours.length > 0 && (
-                <div className="grid grid-cols-3 gap-4 mb-6">
+                <div className="grid grid-cols-3 gap-4 mb-6 hours-container">
                   {availableHours.map((hour) => (
                     <button
                       key={hour}
                       onClick={() => setSelectedHour(hour)}
-                      className={`px-4 py-2 border rounded-lg text-center
-                        ${
-                          selectedHour === hour
-                            ? 'bg-blue-600 text-white border-blue-600'
-                            : 'bg-white text-blue-600 border-blue-600'
-                        } hover:bg-blue-700 hover:text-white`}
+                      className={`hour-button ${
+                        selectedHour === hour ? 'hour-button--active' : ''
+                      }`}
                     >
                       {hour}
                     </button>
@@ -338,11 +306,10 @@ const SchedulingPage = () => {
                   Nu mai sunt ore disponibile pentru această zi.
                 </p>
               )}
-              {/* "Programează" button displays only when an hour is chosen */}
               {selectedHour && (
                 <button
                   onClick={handleProgramare}
-                  className="px-6 py-3 mt-auto self-start bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700"
+                  className="submit-button mt-auto self-start"
                 >
                   Programează
                 </button>
