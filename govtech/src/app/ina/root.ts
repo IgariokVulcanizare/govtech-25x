@@ -1,4 +1,4 @@
-
+// app/api/chat/route.ts
 import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
@@ -13,6 +13,7 @@ export async function POST(request: Request) {
       );
     }
 
+    // Make sure you have set OPENAI_API_KEY in your .env file
     const apiKey = process.env.OPENAI_API_KEY;
     if (!apiKey) {
       console.error('OpenAI API key missing');
@@ -22,14 +23,16 @@ export async function POST(request: Request) {
       );
     }
 
+    // Optional: timeout logic to cancel requests that take too long
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 10000); // 10s timeout
+    const timeout = setTimeout(() => controller.abort(), 10000);
 
+    // Make the request to OpenAI
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer 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`
+        'Authorization': `Bearer ${apiKey}`
       },
       body: JSON.stringify({
         model: 'gpt-3.5-turbo',

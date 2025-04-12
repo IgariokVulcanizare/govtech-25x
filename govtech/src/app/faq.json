@@ -1,0 +1,402 @@
+[
+  {
+    "intrebare": "Mă doare gat ce să fac?",
+    "raspuns": "Poți lua un antiinflamator ușor, cum ar fi paracetamol sau ibuprofen, și să bei lichide calde."
+  },
+  {
+    "intrebare": "Ce pot face când mă doare gat?",
+    "raspuns": "Poți lua un antiinflamator ușor, cum ar fi paracetamol sau ibuprofen, și să bei lichide calde."
+  },
+  {
+    "intrebare": "Am probleme cu gat, ce recomandați?",
+    "raspuns": "Poți lua un antiinflamator ușor, cum ar fi paracetamol sau ibuprofen, și să bei lichide calde."
+  },
+  {
+    "intrebare": "Ce medicament pot lua pentru durere de gat?",
+    "raspuns": "Poți lua un antiinflamator ușor, cum ar fi paracetamol sau ibuprofen, și să bei lichide calde."
+  },
+  {
+    "intrebare": "Cum scap de durerea de gat?",
+    "raspuns": "Poți lua un antiinflamator ușor, cum ar fi paracetamol sau ibuprofen, și să bei lichide calde."
+  },
+  {
+    "intrebare": "Mă doare gâtul – ce recomandare aveți?",
+    "raspuns": "Poți lua un antiinflamator ușor, cum ar fi paracetamol sau ibuprofen, și să bei lichide calde."
+  },
+  {
+    "intrebare": "Mă doare gâtul – cum pot trata acasă?",
+    "raspuns": "Poți lua un antiinflamator ușor, cum ar fi paracetamol sau ibuprofen, și să bei lichide calde."
+  },
+  {
+    "intrebare": "Mă doare gâtul – e nevoie să merg la doctor?",
+    "raspuns": "Poți lua un antiinflamator ușor, cum ar fi paracetamol sau ibuprofen, și să bei lichide calde."
+  },
+  {
+    "intrebare": "Mă doare febra ce să fac?",
+    "raspuns": "Paracetamolul sau ibuprofenul pot ajuta la scăderea febrei."
+  },
+  {
+    "intrebare": "Ce pot face când mă doare febra?",
+    "raspuns": "Paracetamolul sau ibuprofenul pot ajuta la scăderea febrei."
+  },
+  {
+    "intrebare": "Am probleme cu febra, ce recomandați?",
+    "raspuns": "Paracetamolul sau ibuprofenul pot ajuta la scăderea febrei."
+  },
+  {
+    "intrebare": "Ce medicament pot lua pentru durere de febra?",
+    "raspuns": "Paracetamolul sau ibuprofenul pot ajuta la scăderea febrei."
+  },
+  {
+    "intrebare": "Cum scap de durerea de febra?",
+    "raspuns": "Paracetamolul sau ibuprofenul pot ajuta la scăderea febrei."
+  },
+  {
+    "intrebare": "Am febră – ce recomandare aveți?",
+    "raspuns": "Paracetamolul sau ibuprofenul pot ajuta la scăderea febrei."
+  },
+  {
+    "intrebare": "Am febră – cum pot trata acasă?",
+    "raspuns": "Paracetamolul sau ibuprofenul pot ajuta la scăderea febrei."
+  },
+  {
+    "intrebare": "Am febră – e nevoie să merg la doctor?",
+    "raspuns": "Paracetamolul sau ibuprofenul pot ajuta la scăderea febrei."
+  },
+  {
+    "intrebare": "Mă doare tuse ce să fac?",
+    "raspuns": "Dacă tusea persistă mai mult de o săptămână sau este însoțită de febră mare, mergi la medic."
+  },
+  {
+    "intrebare": "Ce pot face când mă doare tuse?",
+    "raspuns": "Dacă tusea persistă mai mult de o săptămână sau este însoțită de febră mare, mergi la medic."
+  },
+  {
+    "intrebare": "Am probleme cu tuse, ce recomandați?",
+    "raspuns": "Dacă tusea persistă mai mult de o săptămână sau este însoțită de febră mare, mergi la medic."
+  },
+  {
+    "intrebare": "Ce medicament pot lua pentru durere de tuse?",
+    "raspuns": "Dacă tusea persistă mai mult de o săptămână sau este însoțită de febră mare, mergi la medic."
+  },
+  {
+    "intrebare": "Cum scap de durerea de tuse?",
+    "raspuns": "Dacă tusea persistă mai mult de o săptămână sau este însoțită de febră mare, mergi la medic."
+  },
+  {
+    "intrebare": "Tușesc de câteva zile – ce recomandare aveți?",
+    "raspuns": "Dacă tusea persistă mai mult de o săptămână sau este însoțită de febră mare, mergi la medic."
+  },
+  {
+    "intrebare": "Tușesc de câteva zile – cum pot trata acasă?",
+    "raspuns": "Dacă tusea persistă mai mult de o săptămână sau este însoțită de febră mare, mergi la medic."
+  },
+  {
+    "intrebare": "Tușesc de câteva zile – e nevoie să merg la doctor?",
+    "raspuns": "Dacă tusea persistă mai mult de o săptămână sau este însoțită de febră mare, mergi la medic."
+  },
+  {
+    "intrebare": "Mă doare dureri cap ce să fac?",
+    "raspuns": "Poate fi cauzată de stres, deshidratare sau lipsă de somn. Dacă persistă, consultă un medic neurolog."
+  },
+  {
+    "intrebare": "Ce pot face când mă doare dureri cap?",
+    "raspuns": "Poate fi cauzată de stres, deshidratare sau lipsă de somn. Dacă persistă, consultă un medic neurolog."
+  },
+  {
+    "intrebare": "Am probleme cu dureri cap, ce recomandați?",
+    "raspuns": "Poate fi cauzată de stres, deshidratare sau lipsă de somn. Dacă persistă, consultă un medic neurolog."
+  },
+  {
+    "intrebare": "Ce medicament pot lua pentru durere de dureri cap?",
+    "raspuns": "Poate fi cauzată de stres, deshidratare sau lipsă de somn. Dacă persistă, consultă un medic neurolog."
+  },
+  {
+    "intrebare": "Cum scap de durerea de dureri cap?",
+    "raspuns": "Poate fi cauzată de stres, deshidratare sau lipsă de somn. Dacă persistă, consultă un medic neurolog."
+  },
+  {
+    "intrebare": "Am durere de cap frecventă – ce recomandare aveți?",
+    "raspuns": "Poate fi cauzată de stres, deshidratare sau lipsă de somn. Dacă persistă, consultă un medic neurolog."
+  },
+  {
+    "intrebare": "Am durere de cap frecventă – cum pot trata acasă?",
+    "raspuns": "Poate fi cauzată de stres, deshidratare sau lipsă de somn. Dacă persistă, consultă un medic neurolog."
+  },
+  {
+    "intrebare": "Am durere de cap frecventă – e nevoie să merg la doctor?",
+    "raspuns": "Poate fi cauzată de stres, deshidratare sau lipsă de somn. Dacă persistă, consultă un medic neurolog."
+  },
+  {
+    "intrebare": "Mă doare nas infundat ce să fac?",
+    "raspuns": "Poți folosi un spray nazal cu apă de mare sau decongestionante nazale."
+  },
+  {
+    "intrebare": "Ce pot face când mă doare nas infundat?",
+    "raspuns": "Poți folosi un spray nazal cu apă de mare sau decongestionante nazale."
+  },
+  {
+    "intrebare": "Am probleme cu nas infundat, ce recomandați?",
+    "raspuns": "Poți folosi un spray nazal cu apă de mare sau decongestionante nazale."
+  },
+  {
+    "intrebare": "Ce medicament pot lua pentru durere de nas infundat?",
+    "raspuns": "Poți folosi un spray nazal cu apă de mare sau decongestionante nazale."
+  },
+  {
+    "intrebare": "Cum scap de durerea de nas infundat?",
+    "raspuns": "Poți folosi un spray nazal cu apă de mare sau decongestionante nazale."
+  },
+  {
+    "intrebare": "Am nasul înfundat – ce recomandare aveți?",
+    "raspuns": "Poți folosi un spray nazal cu apă de mare sau decongestionante nazale."
+  },
+  {
+    "intrebare": "Am nasul înfundat – cum pot trata acasă?",
+    "raspuns": "Poți folosi un spray nazal cu apă de mare sau decongestionante nazale."
+  },
+  {
+    "intrebare": "Am nasul înfundat – e nevoie să merg la doctor?",
+    "raspuns": "Poți folosi un spray nazal cu apă de mare sau decongestionante nazale."
+  },
+  {
+    "intrebare": "Mă doare raceala ce să fac?",
+    "raspuns": "Ceaiuri calde cu lămâie și miere, odihnă și supă caldă pot ajuta."
+  },
+  {
+    "intrebare": "Ce pot face când mă doare raceala?",
+    "raspuns": "Ceaiuri calde cu lămâie și miere, odihnă și supă caldă pot ajuta."
+  },
+  {
+    "intrebare": "Am probleme cu raceala, ce recomandați?",
+    "raspuns": "Ceaiuri calde cu lămâie și miere, odihnă și supă caldă pot ajuta."
+  },
+  {
+    "intrebare": "Ce medicament pot lua pentru durere de raceala?",
+    "raspuns": "Ceaiuri calde cu lămâie și miere, odihnă și supă caldă pot ajuta."
+  },
+  {
+    "intrebare": "Cum scap de durerea de raceala?",
+    "raspuns": "Ceaiuri calde cu lămâie și miere, odihnă și supă caldă pot ajuta."
+  },
+  {
+    "intrebare": "Am răcit – ce recomandare aveți?",
+    "raspuns": "Ceaiuri calde cu lămâie și miere, odihnă și supă caldă pot ajuta."
+  },
+  {
+    "intrebare": "Am răcit – cum pot trata acasă?",
+    "raspuns": "Ceaiuri calde cu lămâie și miere, odihnă și supă caldă pot ajuta."
+  },
+  {
+    "intrebare": "Am răcit – e nevoie să merg la doctor?",
+    "raspuns": "Ceaiuri calde cu lămâie și miere, odihnă și supă caldă pot ajuta."
+  },
+  {
+    "intrebare": "Mă doare stomac ce să fac?",
+    "raspuns": "Evită alimentele grase și picante. Dacă durerile persistă, consultă un gastroenterolog."
+  },
+  {
+    "intrebare": "Ce pot face când mă doare stomac?",
+    "raspuns": "Evită alimentele grase și picante. Dacă durerile persistă, consultă un gastroenterolog."
+  },
+  {
+    "intrebare": "Am probleme cu stomac, ce recomandați?",
+    "raspuns": "Evită alimentele grase și picante. Dacă durerile persistă, consultă un gastroenterolog."
+  },
+  {
+    "intrebare": "Ce medicament pot lua pentru durere de stomac?",
+    "raspuns": "Evită alimentele grase și picante. Dacă durerile persistă, consultă un gastroenterolog."
+  },
+  {
+    "intrebare": "Cum scap de durerea de stomac?",
+    "raspuns": "Evită alimentele grase și picante. Dacă durerile persistă, consultă un gastroenterolog."
+  },
+  {
+    "intrebare": "Am dureri de stomac după ce mănânc – ce recomandare aveți?",
+    "raspuns": "Evită alimentele grase și picante. Dacă durerile persistă, consultă un gastroenterolog."
+  },
+  {
+    "intrebare": "Am dureri de stomac după ce mănânc – cum pot trata acasă?",
+    "raspuns": "Evită alimentele grase și picante. Dacă durerile persistă, consultă un gastroenterolog."
+  },
+  {
+    "intrebare": "Am dureri de stomac după ce mănânc – e nevoie să merg la doctor?",
+    "raspuns": "Evită alimentele grase și picante. Dacă durerile persistă, consultă un gastroenterolog."
+  },
+  {
+    "intrebare": "Mă doare glezna ce să fac?",
+    "raspuns": "Aplică gheață, ridică piciorul și evită să calci pe el prea mult."
+  },
+  {
+    "intrebare": "Ce pot face când mă doare glezna?",
+    "raspuns": "Aplică gheață, ridică piciorul și evită să calci pe el prea mult."
+  },
+  {
+    "intrebare": "Am probleme cu glezna, ce recomandați?",
+    "raspuns": "Aplică gheață, ridică piciorul și evită să calci pe el prea mult."
+  },
+  {
+    "intrebare": "Ce medicament pot lua pentru durere de glezna?",
+    "raspuns": "Aplică gheață, ridică piciorul și evită să calci pe el prea mult."
+  },
+  {
+    "intrebare": "Cum scap de durerea de glezna?",
+    "raspuns": "Aplică gheață, ridică piciorul și evită să calci pe el prea mult."
+  },
+  {
+    "intrebare": "Mi s-a umflat glezna – ce recomandare aveți?",
+    "raspuns": "Aplică gheață, ridică piciorul și evită să calci pe el prea mult."
+  },
+  {
+    "intrebare": "Mi s-a umflat glezna – cum pot trata acasă?",
+    "raspuns": "Aplică gheață, ridică piciorul și evită să calci pe el prea mult."
+  },
+  {
+    "intrebare": "Mi s-a umflat glezna – e nevoie să merg la doctor?",
+    "raspuns": "Aplică gheață, ridică piciorul și evită să calci pe el prea mult."
+  },
+  {
+    "intrebare": "Mă doare tensiune ce să fac?",
+    "raspuns": "Respirație profundă, evitarea cofeinei și repaus. Dar consultă urgent medicul dacă e prea mare."
+  },
+  {
+    "intrebare": "Ce pot face când mă doare tensiune?",
+    "raspuns": "Respirație profundă, evitarea cofeinei și repaus. Dar consultă urgent medicul dacă e prea mare."
+  },
+  {
+    "intrebare": "Am probleme cu tensiune, ce recomandați?",
+    "raspuns": "Respirație profundă, evitarea cofeinei și repaus. Dar consultă urgent medicul dacă e prea mare."
+  },
+  {
+    "intrebare": "Ce medicament pot lua pentru durere de tensiune?",
+    "raspuns": "Respirație profundă, evitarea cofeinei și repaus. Dar consultă urgent medicul dacă e prea mare."
+  },
+  {
+    "intrebare": "Cum scap de durerea de tensiune?",
+    "raspuns": "Respirație profundă, evitarea cofeinei și repaus. Dar consultă urgent medicul dacă e prea mare."
+  },
+  {
+    "intrebare": "Cum pot scădea tensiunea arterială rapid – ce recomandare aveți?",
+    "raspuns": "Respirație profundă, evitarea cofeinei și repaus. Dar consultă urgent medicul dacă e prea mare."
+  },
+  {
+    "intrebare": "Cum pot scădea tensiunea arterială rapid – cum pot trata acasă?",
+    "raspuns": "Respirație profundă, evitarea cofeinei și repaus. Dar consultă urgent medicul dacă e prea mare."
+  },
+  {
+    "intrebare": "Cum pot scădea tensiunea arterială rapid – e nevoie să merg la doctor?",
+    "raspuns": "Respirație profundă, evitarea cofeinei și repaus. Dar consultă urgent medicul dacă e prea mare."
+  },
+  {
+    "intrebare": "Mă doare mancarime ce să fac?",
+    "raspuns": "Poate fi o reacție alergică, piele uscată sau o afecțiune dermatologică. Folosește o cremă hidratantă și mergi la dermatolog dacă persistă."
+  },
+  {
+    "intrebare": "Ce pot face când mă doare mancarime?",
+    "raspuns": "Poate fi o reacție alergică, piele uscată sau o afecțiune dermatologică. Folosește o cremă hidratantă și mergi la dermatolog dacă persistă."
+  },
+  {
+    "intrebare": "Am probleme cu mancarime, ce recomandați?",
+    "raspuns": "Poate fi o reacție alergică, piele uscată sau o afecțiune dermatologică. Folosește o cremă hidratantă și mergi la dermatolog dacă persistă."
+  },
+  {
+    "intrebare": "Ce medicament pot lua pentru durere de mancarime?",
+    "raspuns": "Poate fi o reacție alergică, piele uscată sau o afecțiune dermatologică. Folosește o cremă hidratantă și mergi la dermatolog dacă persistă."
+  },
+  {
+    "intrebare": "Cum scap de durerea de mancarime?",
+    "raspuns": "Poate fi o reacție alergică, piele uscată sau o afecțiune dermatologică. Folosește o cremă hidratantă și mergi la dermatolog dacă persistă."
+  },
+  {
+    "intrebare": "Mă mănâncă pielea – ce recomandare aveți?",
+    "raspuns": "Poate fi o reacție alergică, piele uscată sau o afecțiune dermatologică. Folosește o cremă hidratantă și mergi la dermatolog dacă persistă."
+  },
+  {
+    "intrebare": "Mă mănâncă pielea – cum pot trata acasă?",
+    "raspuns": "Poate fi o reacție alergică, piele uscată sau o afecțiune dermatologică. Folosește o cremă hidratantă și mergi la dermatolog dacă persistă."
+  },
+  {
+    "intrebare": "Mă mănâncă pielea – e nevoie să merg la doctor?",
+    "raspuns": "Poate fi o reacție alergică, piele uscată sau o afecțiune dermatologică. Folosește o cremă hidratantă și mergi la dermatolog dacă persistă."
+  },
+  {
+    "intrebare": "Am răcit – ce recomandare aveți?",
+    "raspuns": "Ceaiuri calde cu lămâie și miere, odihnă și supă caldă pot ajuta."
+  },
+  {
+    "intrebare": "Cum scap de durerea de dureri cap?",
+    "raspuns": "Poate fi cauzată de stres, deshidratare sau lipsă de somn. Dacă persistă, consultă un medic neurolog."
+  },
+  {
+    "intrebare": "Am dureri de stomac după ce mănânc – ce recomandare aveți?",
+    "raspuns": "Evită alimentele grase și picante. Dacă durerile persistă, consultă un gastroenterolog."
+  },
+  {
+    "intrebare": "Am durere de cap frecventă – cum pot trata acasă?",
+    "raspuns": "Poate fi cauzată de stres, deshidratare sau lipsă de somn. Dacă persistă, consultă un medic neurolog."
+  },
+  {
+    "intrebare": "Ce pot face când mă doare dureri cap?",
+    "raspuns": "Poate fi cauzată de stres, deshidratare sau lipsă de somn. Dacă persistă, consultă un medic neurolog."
+  },
+  {
+    "intrebare": "Am răcit – cum pot trata acasă?",
+    "raspuns": "Ceaiuri calde cu lămâie și miere, odihnă și supă caldă pot ajuta."
+  },
+  {
+    "intrebare": "Mă doare raceala ce să fac?",
+    "raspuns": "Ceaiuri calde cu lămâie și miere, odihnă și supă caldă pot ajuta."
+  },
+  {
+    "intrebare": "Ce medicament pot lua pentru durere de raceala?",
+    "raspuns": "Ceaiuri calde cu lămâie și miere, odihnă și supă caldă pot ajuta."
+  },
+  {
+    "intrebare": "Mă doare gat ce să fac?",
+    "raspuns": "Poți lua un antiinflamator ușor, cum ar fi paracetamol sau ibuprofen, și să bei lichide calde."
+  },
+  {
+    "intrebare": "Am durere de cap frecventă – cum pot trata acasă?",
+    "raspuns": "Poate fi cauzată de stres, deshidratare sau lipsă de somn. Dacă persistă, consultă un medic neurolog."
+  },
+  {
+    "intrebare": "Am nasul înfundat – e nevoie să merg la doctor?",
+    "raspuns": "Poți folosi un spray nazal cu apă de mare sau decongestionante nazale."
+  },
+  {
+    "intrebare": "Ce medicament pot lua pentru durere de dureri cap?",
+    "raspuns": "Poate fi cauzată de stres, deshidratare sau lipsă de somn. Dacă persistă, consultă un medic neurolog."
+  },
+  {
+    "intrebare": "Am nasul înfundat – ce recomandare aveți?",
+    "raspuns": "Poți folosi un spray nazal cu apă de mare sau decongestionante nazale."
+  },
+  {
+    "intrebare": "Ce pot face când mă doare gat?",
+    "raspuns": "Poți lua un antiinflamator ușor, cum ar fi paracetamol sau ibuprofen, și să bei lichide calde."
+  },
+  {
+    "intrebare": "Am durere de cap frecventă – cum pot trata acasă?",
+    "raspuns": "Poate fi cauzată de stres, deshidratare sau lipsă de somn. Dacă persistă, consultă un medic neurolog."
+  },
+  {
+    "intrebare": "Tușesc de câteva zile – cum pot trata acasă?",
+    "raspuns": "Dacă tusea persistă mai mult de o săptămână sau este însoțită de febră mare, mergi la medic."
+  },
+  {
+    "intrebare": "Am dureri de stomac după ce mănânc – cum pot trata acasă?",
+    "raspuns": "Evită alimentele grase și picante. Dacă durerile persistă, consultă un gastroenterolog."
+  },
+  {
+    "intrebare": "Mă mănâncă pielea – ce recomandare aveți?",
+    "raspuns": "Poate fi o reacție alergică, piele uscată sau o afecțiune dermatologică. Folosește o cremă hidratantă și mergi la dermatolog dacă persistă."
+  },
+  {
+    "intrebare": "Ce medicament pot lua pentru durere de nas infundat?",
+    "raspuns": "Poți folosi un spray nazal cu apă de mare sau decongestionante nazale."
+  },
+  {
+    "intrebare": "Mă doare glezna ce să fac?",
+    "raspuns": "Aplică gheață, ridică piciorul și evită să calci pe el prea mult."
+  }
+]
