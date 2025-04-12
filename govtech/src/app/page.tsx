@@ -56,15 +56,13 @@ export default function Home() {
     }, 600);
   };
 
-  const wordCount = userInput.trim().split(/\s+/).filter((word) => word).length;
-
   return (
     <div className="min-h-screen w-full bg-[#B1D6FF] flex flex-col items-center relative">
       {/* Sticky Navbar */}
       <Navbar />
 
       {/* First Rectangle */}
-      <div className="relative w-[90%] max-w-8xl bg-white rounded-[3.25vh] -mt-17 mb-8 h-[95vh] flex flex-col md:flex-row">
+      <div className="relative w-[90%] max-w-8xl bg-white rounded-[3.25vh] -mt-17 mb-8 h-[95vh] flex flex-col ">
         {/* Left half: Text + Button */}
         <div className="w-full md:w-1/2 flex flex-col justify-center p-8">
           <h1 className="text-7xl font-bold text-[#0077FF] mb-6 ml-6 leading-[1.2]">
