@@ -21,7 +21,7 @@ const MyPage = () => {
         </div>
 
         {/* Two Rectangles Section */}
-        <div className="w-full md:w-1/2 flex items-center justify-center p-8">
+        <div className="w-full md:w-2/3 flex items-center justify-center p-10">
           <div className="flex flex-col md:flex-row gap-8">
 
             {/* First Rectangle */}
