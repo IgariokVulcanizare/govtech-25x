@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Card from "./Components/Cards";
 import Navbar from "./Components/page";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { FiPhoneCall, FiSend } from "react-icons/fi";
@@ -61,7 +62,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#B1D6FF] flex flex-col items-center relative">
+    <div className="min-h-screen w-full bg-[#B1D6FF] flex flex-col items-center relative h-430">
       {/* Sticky Navbar */}
       <Navbar />
 
@@ -96,8 +97,6 @@ export default function Home() {
         </button>
       </div>
 
-      {/* Second Rectangle */}
-      <div className="w-[90%] max-w-8xl bg-white rounded-[3.25vh] my-8 h-[80vh]"></div>
 
       {/* Chat Panel */}
       {showChat && (
@@ -163,6 +162,32 @@ export default function Home() {
           </div>
         </div>
       )}
+      
+      {/* Second Rectangle remains unchanged */}
+      <div className="w-[90%] max-w-8xl bg-white rounded-[3.25vh] my-8 h-[80vh] px-8 py-6 flex flex-col md:flex-row items-center justify-center">
+        
+        {/* Left text */}
+        <div className="flex gap-6">
+          <div className="mb-8 md:mb-0">
+            <h1 className="flex text-4xl font-bold mb-4 w-[270]">
+              Selectează o opțiune pentru a începe programarea.
+            </h1>
+            <p className="text-gray-600 font-medium text-lg width max-w-[250px]">
+              Ai nevoie de un medic de familie sau un specialist?
+            </p>
+          </div>
+
+        {/* Right cards */}
+          <Card 
+            title="Programare medic de familie" 
+          />
+          <Card 
+            title="Programare alt medic" 
+          />
+        </div>  
+      </div>
+
+      <div className="w-[100%] max-w-8xl bg-white rounded-[3.25vh] my-8 h-100"></div>
     </div>
   );
 }
