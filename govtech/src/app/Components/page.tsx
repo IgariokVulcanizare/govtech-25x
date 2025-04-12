@@ -12,7 +12,7 @@ export default function Navbar() {
     <nav className="sticky top-7 z-50 w-[95%] max-w-[1450px] mx-auto bg-white rounded-[3vh] p-4 shadow-[0_0_15px_rgba(0,0,0,0.15)] flex items-center justify-between text-blue">
       {/* Logo on the left */}
       <div className="pl-4">
-        <Image src="/logo.jpg" alt="Logo" width={150} height={60} priority />
+        <Image src="/logo.jpg" alt="Logo" width={120} height={50} priority />
       </div>
 
       {/* Navigation links for medium+ screens */}

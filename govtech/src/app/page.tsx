@@ -9,48 +9,52 @@ import { FaRegUserCircle } from "react-icons/fa";
 // Import FAQ data from the same directory. Make sure your bundler supports JSON imports.
 import faqData from "./faq.json";
 
+const normalizeText = (text: string): string =>
+  text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
+const commonWordCount = (str1: string, str2: string): number => {
+  const words1: string[] = normalizeText(str1).split(/\s+/);
+  const words2: string[] = normalizeText(str2).split(/\s+/);
+  return words1.filter((word: string) => words2.includes(word)).length;
+};
+
 export default function Home() {
   const [showChat, setShowChat] = useState(false);
   const [messages, setMessages] = useState([
     {
       type: "assistant",
-      text: "Buna ziua, cu ce va putem ajuta astazi?",
+      text: "Bună ziua, cu ce vă putem ajuta?",
     },
   ]);
   const [userInput, setUserInput] = useState("");
 
-  // Helper: count common words between two strings.
-  const commonWordCount = (str1: string, str2: string): number => {
-    const words1: string[] = str1.toLowerCase().split(/\s+/);
-    const words2: string[] = str2.toLowerCase().split(/\s+/);
-    return words1.filter((word: string) => words2.includes(word)).length;
-  };
-
-  // Choose the best matching answer based on common word count from the imported FAQ data.
+  // Function to choose the best matching answer based on common word count from the FAQ data.
   const getBestResponse = (userMsg: string): string => {
-    const input = userMsg.trim().toLowerCase();
+    const input = normalizeText(userMsg.trim());
     let bestMatch = "";
     let bestCount = 0;
-    faqData.forEach(({ intrebare, raspuns }: { intrebare: string; raspuns: string }) => {
-      const count = commonWordCount(input, intrebare);
-      if (count > bestCount) {
-        bestCount = count;
-        bestMatch = raspuns;
+    faqData.forEach(
+      ({ intrebare, raspuns }: { intrebare: string; raspuns: string }) => {
+        const count = commonWordCount(input, intrebare);
+        if (count > bestCount) {
+          bestCount = count;
+          bestMatch = raspuns;
+        }
       }
-    });
+    );
     return bestCount > 0
       ? bestMatch
       : "Îmi pare rău, nu am înțeles. Poți reformula întrebarea?";
   };
 
-  // Handle sending a message
+  // Handle sending the message.
   const handleSend = () => {
     if (!userInput.trim()) return; // Do not send empty messages
-    // Append the user's message
+    // Append the user's message.
     setMessages((prev) => [...prev, { type: "user", text: userInput }]);
     const answer = getBestResponse(userInput);
     setUserInput("");
-    // Simulate a delay for the assistant's response
+    // Simulate a short delay for the assistant's response.
     setTimeout(() => {
       setMessages((prev) => [...prev, { type: "assistant", text: answer }]);
     }, 600);
@@ -62,7 +66,7 @@ export default function Home() {
       <Navbar />
 
       {/* First Rectangle */}
-      <div className="relative w-[90%] max-w-8xl bg-white rounded-[3.25vh] -mt-17 mb-8 h-[95vh] flex flex-col ">
+      <div className="relative w-[90%] max-w-8xl bg-white rounded-[3.25vh] -mt-19 mb-8 h-[95vh] flex flex-col md:flex-row">
         {/* Left half: Text + Button */}
         <div className="w-full md:w-1/2 flex flex-col justify-center p-8">
           <h1 className="text-7xl font-bold text-[#0077FF] mb-6 ml-6 leading-[1.2]">
