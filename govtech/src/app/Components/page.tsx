@@ -33,7 +33,7 @@ export default function Navbar() {
           href="/ajutor"
           className="px-6 py-3 rounded-full border-2 border-transparent text-black transition-all duration-300 ease-in-out hover:border-[#C0DDFF]"
         >
-          Ajutor
+          Contul Meu
         </Link>
       </div>
 
@@ -79,7 +79,7 @@ export default function Navbar() {
             onClick={() => setMenuOpen(false)}
             className="block px-6 py-3 hover:bg-gray-100 text-black text-lg"
           >
-            Ajutor
+            Contul Meu
           </Link>
         </div>
       )}
