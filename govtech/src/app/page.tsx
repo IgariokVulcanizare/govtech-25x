@@ -78,8 +78,7 @@ export default function Home() {
           </button>
         </div>
 
-        {/* Right half: Lottie animation */}
-        <div className="w-full md:w-1/2 h-full flex items-center justify-center mt-15 mr-20">
+        <div className="w-full md:w-1/2 h-full flex items-center justify-center mt-15 mr-20 ">
           <DotLottieReact
             src="https://lottie.host/8129d2a8-bdf8-4b73-b92d-9550b0795084/5Jr1NePiya.lottie"
             loop
@@ -162,14 +161,15 @@ export default function Home() {
           </div>
         </div>
       )}
+
       
       {/* Second Rectangle remains unchanged */}
       <div className="w-[90%] max-w-8xl bg-white rounded-[3.25vh] my-8 h-[80vh] px-8 py-6 flex flex-col md:flex-row items-center justify-center">
         
         {/* Left text */}
-        <div className="flex gap-6">
+        <div className="flex gap-7">
           <div className="mb-8 md:mb-0">
-            <h1 className="flex text-4xl font-bold mb-4 w-[270]">
+            <h1 className="flex text-[38px] font-bold mb-4 w-[300] leading-tight">
               Selectează o opțiune pentru a începe programarea.
             </h1>
             <p className="text-gray-600 font-medium text-lg width max-w-[250px]">

@@ -8,8 +8,8 @@ interface CardProps {
 
   function Card({ title /*icon, link*/ }: CardProps) {
     return (
-      <div className="w-[300px] p-4 bg-white rounded-xl border shadow-sm flex flex-col items-center justify-between text-center">
-        <h2 className="text-lg font-medium mb-2 text-left">{title}</h2>
+      <div className="w-[350px] p-4 bg-white rounded-xl border shadow-sm flex flex-col items-center justify-between text-center">
+        <h2 className="text-3xl font-medium mb-2 text-left">{title}</h2>
         
           <button className="bg-blue-500 hover:bg-blue-600 text-white px-full py-4 rounded-[8] transition shadow-lg">
             Click aici
