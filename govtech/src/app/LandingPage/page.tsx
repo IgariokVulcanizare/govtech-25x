@@ -1,6 +1,6 @@
 "use client";
 
-import Navbar from "./navbar/page";
+import Navbar from "../Components/page";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 export default function Home() {
@@ -39,7 +39,8 @@ export default function Home() {
       </div>
       
       {/* Second Rectangle remains unchanged */}
-      <div className="w-[90%] max-w-8xl bg-white rounded-[3.25vh] my-8 h-[80vh]"></div>
+      <div className="w-[90%] max-w-8xl bg-white rounded-[3.25vh] my-8 h-[80vh]">
+      </div>
     </div>
   );
 }
