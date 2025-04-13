@@ -17,4 +17,20 @@
     font-weight: bold;
     border-radius: 8px;
   }
+  /* Remove grey for "neighboringMonth" days (those from previous/next months). */
+.react-calendar__month-view__days__day--neighboringMonth {
+  color: black !important;         /* Force text to black */
+  opacity: 1 !important;           /* Remove faded look */
+}
+
+/* Keep "disabled" days non-clickable but remove grey styling. */
+.react-calendar__tile--disabled {
+  pointer-events: none;            /* If you want them truly disabled */
+  opacity: 1 !important;
+  color: black !important;
+}
+
+/* If you'd rather remove the disabled logic entirely, just remove the tileDisabled prop 
+   from your React component. Otherwise, this ensures they won't appear grey. */
+
   

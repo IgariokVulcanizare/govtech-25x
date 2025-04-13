@@ -82,7 +82,7 @@ export default function DoctorScheduleCard() {
         </div>
 
         {/* Calendar + Hours */}
-        <div className="flex flex-col lg:flex-row gap-10 w-full">
+        <div className="flex flex-col lg:flex-row gap-10 w-full text-black">
           {/* Calendar */}
           <Calendar
             onChange={handleDateChange}
@@ -90,7 +90,7 @@ export default function DoctorScheduleCard() {
             tileDisabled={({ date }) => isPastDate(date) || date.getDay() === 0}
             tileClassName={({ date }) => {
               if (isPastDate(date) || date.getDay() === 0) {
-                return 'text-gray-400 pointer-events-none';
+                return 'text-black pointer-events-none';
               }
               return undefined;
             }}
@@ -99,7 +99,7 @@ export default function DoctorScheduleCard() {
 
           {/* Hours */}
           <div className="flex flex-col gap-2">
-            <h3 className="text-2xl font-semibold text-gray-700">
+            <h3 className="text-2xl font-semibold text-black">
               {isSunday
                 ? 'Indisponibil (Duminică)'
                 : `Ore disponibile pentru ${date.toLocaleDateString()}`}
@@ -142,7 +142,7 @@ export default function DoctorScheduleCard() {
       {showPopup && (
         <div className="fixed inset-0 bg-[#B1D6FF] bg-opacity-40 flex items-center justify-center z-50">
           <div className="bg-white p-12 w-[400px] sm:w-[500px] rounded-2xl shadow-2xl text-center space-y-6">
-            <h2 className="text-2xl font-bold text-black-600">Confirmat!</h2>
+            <h2 className="text-2xl font-bold text-black">Confirmat!</h2>
             <p className="text-lg text-gray-700">
               Programare efectuată pentru <br />
               <strong className="text-xl">{date.toLocaleDateString()}</strong> la{' '}
