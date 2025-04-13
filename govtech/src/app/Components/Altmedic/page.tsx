@@ -304,7 +304,7 @@ const SchedulingPage = () => {
               {selectedHour && (
                 <button
                   onClick={handleProgramare}
-                  className="submit-button mt-auto self-start"
+                  className="submit-button mt-auto self-start "
                 >
                   Programează-mă
                 </button>
