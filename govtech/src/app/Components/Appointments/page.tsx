@@ -8,7 +8,7 @@ import './SchedulingPage.css';
 import { FaRegClock } from 'react-icons/fa';
 import { IoLocationOutline } from 'react-icons/io5';
 import { AiOutlineClose } from 'react-icons/ai';
-
+import { useRouter } from 'next/navigation';
 interface Appointment {
   id: number;
   doctorName: string;
@@ -30,6 +30,8 @@ const strokeColors = ['border-l-blue-500'];
 type Tab = 'Toate' | 'Imminente' | 'Completate' | 'Anulate';
 
 export default function AppointmentsPage() {
+  const router = useRouter();
+
   const [currentTime, setCurrentTime] = useState(new Date());
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -149,9 +151,12 @@ export default function AppointmentsPage() {
             <FaRegClock className="mr-1 text-gray-700 mr-2" />
             <span className="text-gray-700 font-bold">{formatTime(currentTime)}</span>
           </div>
-          <button className="bg-blue-600 hover:bg-blue-700 text-white text-lg px-4 py-3 rounded-md font-semibold">
-            Programare Nouă
-          </button>
+          <button
+      onClick={() => router.push('/Components/SelectareMedic')}
+      className="bg-blue-600 hover:bg-blue-700 text-white text-lg px-4 py-3 rounded-md font-semibold"
+    >
+      Programare Nouă
+    </button>
         </div>
       </div>
 

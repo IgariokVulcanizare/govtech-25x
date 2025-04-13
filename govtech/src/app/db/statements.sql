@@ -70,13 +70,38 @@ VALUES
 ('1000000000011', 'Petrov', 'Elena', 'Stefan', 'F', '1987-03-17', 'B+', 'Moldovenească', 'CI', 'MP112233', '2005-05-05', '2015-05-05', 'Chișinău', 'Moldova', 'Str. Centrală', 'L', '7', 'Premium', 'Activ', 'AsigLife', 'Tip C', 'Angajată', 'Evidență 11', 'Triaj 11', 'Consultație 11', 'Diagnostic 11', 'Examen 11', 'Reacții ușoare', 'Program 11', '2022-12-12', '2022-12-13', 'Internare 11', '2022-12-22'),
 ('1000000000012', 'Ciobanu', 'Vlad', 'Ilie', 'M', '1993-11-05', 'O+', 'Moldovenească', 'BI', 'MP223344', '2009-04-04', '2019-04-04', 'Bălți', 'Moldova', 'Str. Libertății', 'M', '10', 'Basic', 'Activ', 'AsigCare', 'Tip A', 'Angajat', 'Evidență 12', 'Triaj 12', 'Consultație 12', 'Diagnostic 12', 'Examen 12', 'Reacții minore', 'Program 12', '2022-11-11', '2022-11-12', 'Internare 12', '2022-11-21'),
 ('1000000000013', 'Marincu', 'Sergiu', 'Dumitru', 'M', '1983-04-22', 'AB-', 'Moldovenească', 'CI', 'MP334455', '2004-06-06', '2014-06-06', 'Chișinău', 'Moldova', 'Str. Victoriei', 'N', '4', 'Standard', 'Activ', 'AsigMed', 'Tip B', 'Angajat', 'Evidență 13', 'Triaj 13', 'Consultație 13', 'Diagnostic 13', 'Examen 13', 'Fără reacții', 'Program 13', '2022-10-10', '2022-10-11', 'Internare 13', '2022-10-20'),
-('1000000000014', 'Cristea', 'Elena', 'Valentin', 'F', '1991-06-30', 'A+', 'Moldovenească', 'BI', 'MP445566', '2007-07-07', '2017-07-07', 'Chișinău', 'Moldova', 'Str. Dacia', 'O', '6B', 'Premium', 'Activ', 'AsigLife', 'Tip C', 'Studenta', 'Evidență 14', 'Triaj 14', 'Consultație 14', 'Diagnostic 14', 'Examen 14', 'Reacții minore', 'Program 14', '2022-09-09', '2022-09-10', 'Internare 14', '2022-09-19'),
+('1000000000014', 'Cristea', 'Elena', 'Valentin', 'F', '1991-06-30', 'A+', '['Moldovenească', 'BI', 'MP445566', '2007-07-07', '2017-07-07', 'Chișinău', 'Moldova', 'Str. Dacia', 'O', '6B', 'Premium', 'Activ', 'AsigLife', 'Tip C', 'Studenta', 'Evidență 14', 'Triaj 14', 'Consultație 14', 'Diagnostic 14', 'Examen 14', 'Reacții minore', 'Program 14', '2022-09-09', '2022-09-10', 'Internare 14', '2022-09-19'),
 ('1000000000015', 'Donosor', 'Ivan', 'Cornel', 'M', '1980-10-10', 'B-', 'Moldovenească', 'CI', 'MP556677', '2000-10-10', '2010-10-10', 'Bălți', 'Moldova', 'Str. Principală', 'P', '8', 'Standard', 'Activ', 'AsigPlus', 'Tip A', 'Angajat', 'Evidență 15', 'Triaj 15', 'Consultație 15', 'Diagnostic 15', 'Examen 15', 'Moderate reacții', 'Program 15', '2022-08-08', '2022-08-09', 'Internare 15', '2022-08-18'),
 ('1000000000016', 'Stefanescu', 'Ioana', 'Marian', 'F', '1994-12-12', 'O-', 'Moldovenească', 'CI', 'MP667788', '2011-11-11', '2021-11-11', 'Chișinău', 'Moldova', 'Str. Mărășești', 'Q', '11', 'Basic', 'Pasiv', 'AsigCare', 'Tip B', 'Studenta', 'Evidență 16', 'Triaj 16', 'Consultație 16', 'Diagnostic 16', 'Examen 16', 'Ușoare reacții', 'Program 16', '2022-07-07', '2022-07-08', 'Internare 16', '2022-07-17'),
 ('1000000000017', 'Tudor', 'Adrian', 'Lucian', 'M', '1986-05-05', 'A-', 'Moldovenească', 'BI', 'MP778899', '2005-05-05', '2015-05-05', 'Bălți', 'Moldova', 'Str. Independenței', 'R', '3', 'Standard', 'Activ', 'AsigMed', 'Tip A', 'Angajat', 'Evidență 17', 'Triaj 17', 'Consultație 17', 'Diagnostic 17', 'Examen 17', 'Reacții minore', 'Program 17', '2022-06-06', '2022-06-07', 'Internare 17', '2022-06-16'),
 ('1000000000018', 'Sturza', 'Victoria', 'Alina', 'F', '1997-03-03', 'B+', 'Moldovenească', 'CI', 'MP889900', '2012-02-02', '2022-02-02', 'Chișinău', 'Moldova', 'Str. Orașului', 'S', '14', 'Premium', 'Activ', 'AsigLife', 'Tip B', 'Angajată', 'Evidență 18', 'Triaj 18', 'Consultație 18', 'Diagnostic 18', 'Examen 18', 'Fără reacții', 'Program 18', '2022-05-05', '2022-05-06', 'Internare 18', '2022-05-15'),
 ('1000000000019', 'Cebotari', 'Constantin', 'Vlad', 'M', '1989-07-07', 'O+', 'Moldovenească', 'BI', 'MP990011', '2008-08-08', '2018-08-08', 'Bălți', 'Moldova', 'Str. Decebal', 'T', '2', 'Basic', 'Activ', 'AsigCare', 'Tip C', 'Angajat', 'Evidență 19', 'Triaj 19', 'Consultație 19', 'Diagnostic 19', 'Examen 19', 'Reacții ușoare', 'Program 19', '2022-04-04', '2022-04-05', 'Internare 19', '2022-04-14'),
 ('1000000000020', 'Berezovita', 'Liana', 'Marcel', 'F', '1996-09-09', 'A+', 'Moldovenească', 'CI', 'MP101112', '2013-03-03', '2023-03-03', 'Chișinău', 'Moldova', 'Str. Libertății', 'U', '6', 'Premium', 'Activ', 'AsigLife', 'Tip B', 'Angajată', 'Evidență 20', 'Triaj 20', 'Consultație 20', 'Diagnostic 20', 'Examen 20', 'Fără reacții', 'Program 20', '2022-03-03', '2022-03-04', 'Internare 20', '2022-03-13');
+
+UPDATE Pacienti
+SET telefon = CASE idnp
+  WHEN '1000000000001' THEN '+3736000001'
+  WHEN '1000000000002' THEN '+3736000002'
+  WHEN '1000000000003' THEN '+3736000003'
+  WHEN '1000000000004' THEN '+3736000004'
+  WHEN '1000000000005' THEN '+3736000005'
+  WHEN '1000000000006' THEN '+3736000006'
+  WHEN '1000000000007' THEN '+3736000007'
+  WHEN '1000000000008' THEN '+3736000008'
+  WHEN '1000000000009' THEN '+3736000009'
+  WHEN '1000000000010' THEN '+3736000010'
+  WHEN '1000000000011' THEN '+3736000011'
+  WHEN '1000000000012' THEN '+3736000012'
+  WHEN '1000000000013' THEN '+3736000013'
+  WHEN '1000000000014' THEN '+3736000014'
+  WHEN '1000000000015' THEN '+3736000015'
+  WHEN '1000000000016' THEN '+3736000016'
+  WHEN '1000000000017' THEN '+3736000017'
+  WHEN '1000000000018' THEN '+3736000018'
+  WHEN '1000000000019' THEN '+3736000019'
+  WHEN '1000000000020' THEN '+3736000020'
+  ELSE telefon
+END;
 
 -- ============================================================================
 -- 2. TABLE: Lucrători Medicali (persoană fizică – lucrător medical)

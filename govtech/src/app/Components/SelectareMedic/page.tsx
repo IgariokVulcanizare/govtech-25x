@@ -1,8 +1,14 @@
+"use client";
+
 import React from 'react';
+import Image from 'next/image';
 import { CiStethoscope } from "react-icons/ci";
 import { FaUserDoctor } from "react-icons/fa6";
+import { useRouter } from "next/navigation";
 
 const MyPage = () => {
+  const router = useRouter();
+
   return (
     <div
       className="min-h-screen bg-[#B1D6FF] flex items-center justify-center"
@@ -40,7 +46,10 @@ const MyPage = () => {
               
               {/* Button Centered at Bottom */}
               <div className="flex-grow flex items-center justify-center">
-                <button className="bg-blue-500 text-white text-4xl px-16 py-4 rounded-xl hover:bg-blue-600 transition-colors mt-49">
+                <button
+                  onClick={() => router.push("./Medic_de_familie")}
+                  className="bg-blue-500 text-white text-4xl px-16 py-4 rounded-xl hover:bg-blue-600 transition-colors mt-49"
+                >
                   Click aici
                 </button>
               </div>
@@ -62,7 +71,10 @@ const MyPage = () => {
 
               {/* Button Centered at Bottom */}
               <div className="flex-grow flex items-center justify-center">
-                <button className="bg-blue-500 text-white text-4xl px-16 py-4 rounded-xl hover:bg-blue-600 transition-colors mt-60">
+                <button
+                  onClick={() => router.push("./Altmedic")}
+                  className="bg-blue-500 text-white text-4xl px-16 py-4 rounded-xl hover:bg-blue-600 transition-colors mt-60"
+                >
                   Click aici
                 </button>
               </div>

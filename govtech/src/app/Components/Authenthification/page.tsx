@@ -1,32 +1,59 @@
-'use client';
-import React, { useState } from 'react';
+"use client";
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+
+// Define a mock database with one example user
+const mockDatabase = [
+  {
+    idnp: "1234567890123",
+    nume: "Popescu",
+    prenume: "Ion",
+    dataNasterii: "1980-01-01", // format YYYY-MM-DD
+    telefon: "0712345678",
+  },
+  // You can add additional mock records here if needed.
+];
 
 export default function Authentification() {
-  // State management for form fields
-  const [idnp, setIdnp] = useState('');
-  const [nume, setNume] = useState('');
-  const [prenume, setPrenume] = useState('');
-  const [dataNasterii, setDataNasterii] = useState('');
-  const [telefon, setTelefon] = useState('');
+  // State management for form fields – correspond to the database columns
+  const [idnp, setIdnp] = useState("");
+  const [nume, setNume] = useState("");
+  const [prenume, setPrenume] = useState("");
+  const [dataNasterii, setDataNasterii] = useState(""); // corresponds to 'data_nasterii'
+  const [telefon, setTelefon] = useState("");
 
-  // Example submit handler
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const router = useRouter();
+
+  // Handler for the form submission using the mock database
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Handle your authentication logic here
-    console.log({
-      idnp,
-      nume,
-      prenume,
-      dataNasterii,
-      telefon,
-    });
+
+    // Mimic an async delay (for example, as if making a network call)
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
+    // Search for a matching record within the mock database
+    const foundUser = mockDatabase.find(
+      (user) =>
+        user.idnp === idnp &&
+        user.nume.toLowerCase() === nume.toLowerCase() &&
+        user.prenume.toLowerCase() === prenume.toLowerCase() &&
+        user.dataNasterii === dataNasterii &&
+        user.telefon === telefon
+    );
+
+    if (foundUser) {
+      // If a match is found, redirect to the 'SelectareMedic' component/page
+      router.push("./SelectareMedic");
+    } else {
+      // If no match is found, notify the user
+      alert("Date incorecte. Vă rugăm să verificați și să încercați din nou.");
+    }
   };
 
   return (
     <main className="bg-gray-100 min-h-screen text-black p-8 flex items-center justify-center">
-      {/* Outer container for the content */}
       <div className="bg-white w-full max-w-5xl p-8 rounded-md shadow-md grid grid-cols-[1fr_auto_1fr] gap-8">
-        {/* Left section */}
+        {/* Left Section */}
         <div className="flex flex-col items-start justify-start">
           <h2 className="text-2xl font-bold mb-4">Intră în cont</h2>
           <p className="text-lg mb-6 leading-snug">
@@ -44,10 +71,10 @@ export default function Authentification() {
           </a>
         </div>
 
-        {/* Vertical divider */}
+        {/* Vertical Divider */}
         <div className="w-[1px] bg-gray-300" />
 
-        {/* Right section: the form */}
+        {/* Right Section: Authentication Form */}
         <div className="flex flex-col justify-center">
           <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-sm">
             <div>

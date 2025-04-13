@@ -5,28 +5,24 @@ import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { FiPhoneCall, FiSend } from "react-icons/fi";
 import { IoIosClose } from "react-icons/io";
 import { FaRegUserCircle } from "react-icons/fa";
-import OpenAI from "openai";
+import { useRouter } from "next/navigation";
+import OpenAI from "openai";  // 1) Import the OpenAI class
 
-// Inițializează clientul OpenAI cu setările tale
+// 2) Instantiate openai with your config
 const openai = new OpenAI({
   baseURL: "https://openrouter.ai/api/v1",
-  apiKey:
-    "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",
+  apiKey: "sk-or-v1-...", // your actual key
   dangerouslyAllowBrowser: true,
   defaultHeaders: {
-    "HTTP-Referer": "https://igortacu.com", // Înlocuiește cu URL-ul site-ului tău, dacă este necesar.
-    "X-Title": "EasyMed", // Înlocuiește cu numele site-ului tău, dacă este necesar.
+    "HTTP-Referer": "https://igortacu.com",
+    "X-Title": "EasyMed",
   },
 });
 
-type Message = {
-  type: "assistant" | "user";
-  text: string;
-};
-
 export default function Hero() {
+  const router = useRouter();
   const [showChat, setShowChat] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
+  const [messages, setMessages] = useState([
     {
       type: "assistant",
       text: "Bună ziua, cum vă putem ajuta?",
@@ -42,8 +38,7 @@ export default function Hero() {
     setUserInput("");
 
     try {
-      // Apel către API-ul OpenRouter prin intermediul clientului OpenAI,
-      // cu un mesaj de sistem care forțează răspunsul în limba română și doar text simplu, fără formatare.
+      // 3) Use the openai instance
       const completion = await openai.chat.completions.create({
         model: "deepseek/deepseek-r1-zero:free",
         messages: [
@@ -59,7 +54,6 @@ export default function Hero() {
         ],
       });
 
-      // Extrage răspunsul din structura de date primită
       const answer =
         completion &&
         completion.choices &&
@@ -69,11 +63,7 @@ export default function Hero() {
           ? completion.choices[0].message.content
           : "Ne pare rău, nu am găsit informații relevante.";
 
-      // Adaugă imediat răspunsul asistentului
-      setMessages((prev) => [
-        ...prev,
-        { type: "assistant", text: answer },
-      ]);
+      setMessages((prev) => [...prev, { type: "assistant", text: answer }]);
     } catch (error) {
       console.error("Eroare la apelul API:", error);
       setMessages((prev) => [
@@ -86,6 +76,10 @@ export default function Hero() {
     }
   };
 
+  const redirectToAuth = () => {
+    router.push("./Components/Authenthification");
+  };
+
   return (
     <div className="min-h-screen w-full bg-[#B1D6FF] flex flex-col items-center relative">
       {/* Secțiunea principală (Hero Section) */}
@@ -95,7 +89,10 @@ export default function Hero() {
           <h1 className="text-7xl font-bold text-[#0077FF] mb-6 ml-6 leading-[1.2]">
             Sănătatea voastră este prioritatea noastră
           </h1>
-          <button className="bg-[#0077FF] text-white text-2xl px-6 py-3 rounded-full font-semibold hover:bg-[#005ecc] transition-colors ml-6 w-[40%]">
+          <button
+            onClick={redirectToAuth}
+            className="bg-[#0077FF] text-white text-2xl px-6 py-3 rounded-full font-semibold hover:bg-[#005ecc] transition-colors ml-6 w-[40%]"
+          >
             Programează-te
           </button>
         </div>

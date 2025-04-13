@@ -2,44 +2,45 @@
 
 import React, { useState, useEffect } from 'react';
 import Calendar, { CalendarProps } from 'react-calendar';
+import { useRouter } from 'next/navigation'; // Import useRouter for navigation
 import 'react-calendar/dist/Calendar.css';
 import './custom-calendar.css';
 
 const getRandomHours = (date: Date): string[] => {
-    const day = date.getDay();
-    if (day === 0) return []; // Sunday - no hours
-  
-    const allHours = ['08:00', '09:30', '11:00', '13:00', '14:30', '16:00', '16:30', '15:00'];
-    const count = Math.floor(Math.random() * 4) + 2;
-    const shuffled = allHours.sort(() => 0.5 - Math.random());
-    const selected = shuffled.slice(0, count).sort(); // Sort ascending
-  
-    // Filter if it's today: remove hours that already passed
-    const today = new Date();
-    const isToday =
-      date.getDate() === today.getDate() &&
-      date.getMonth() === today.getMonth() &&
-      date.getFullYear() === today.getFullYear();
-  
-    if (isToday) {
-      const now = new Date();
-      return selected.filter((hour) => {
-        const [h, m] = hour.split(':').map(Number);
-        const hourDate = new Date(date);
-        hourDate.setHours(h, m, 0, 0);
-        return hourDate > now;
-      });
-    }
-  
-    return selected;
-  };
-  
+  const day = date.getDay();
+  if (day === 0) return []; // Sunday - no hours
+
+  const allHours = ['08:00', '09:30', '11:00', '13:00', '14:30', '16:00', '16:30', '15:00'];
+  const count = Math.floor(Math.random() * 4) + 2;
+  const shuffled = allHours.sort(() => 0.5 - Math.random());
+  const selected = shuffled.slice(0, count).sort(); // Sort ascending
+
+  // Filter if it's today: remove hours that already passed
+  const today = new Date();
+  const isToday =
+    date.getDate() === today.getDate() &&
+    date.getMonth() === today.getMonth() &&
+    date.getFullYear() === today.getFullYear();
+
+  if (isToday) {
+    const now = new Date();
+    return selected.filter((hour) => {
+      const [h, m] = hour.split(':').map(Number);
+      const hourDate = new Date(date);
+      hourDate.setHours(h, m, 0, 0);
+      return hourDate > now;
+    });
+  }
+
+  return selected;
+};
 
 export default function DoctorScheduleCard() {
   const [date, setDate] = useState<Date>(new Date());
   const [selectedHour, setSelectedHour] = useState<string | null>(null);
   const [showPopup, setShowPopup] = useState(false);
   const [availableHours, setAvailableHours] = useState<string[]>(getRandomHours(new Date()));
+  const router = useRouter(); // Initialize the router
 
   useEffect(() => {
     setAvailableHours(getRandomHours(date));
@@ -93,7 +94,6 @@ export default function DoctorScheduleCard() {
               }
               return undefined;
             }}
-            
             className="rounded-xl shadow-md p-4 bg-white"
           />
 
@@ -140,23 +140,23 @@ export default function DoctorScheduleCard() {
 
       {/* Confirmation Pop-up */}
       {showPopup && (
-  <div className="fixed inset-0 bg-[#B1D6FF] bg-opacity-40 flex items-center justify-center z-50">
-    <div className="bg-white p-12 w-[400px] sm:w-[500px] rounded-2xl shadow-2xl text-center space-y-6">
-      <h2 className="text-2xl font-bold text-black-600">Confirmat!</h2>
-      <p className="text-lg text-gray-700">
-        Programare efectuată pentru <br />
-        <strong className="text-xl">{date.toLocaleDateString()}</strong> la{' '}
-        <strong className="text-xl">{selectedHour}</strong>
-      </p>
-      <button
-        onClick={() => setShowPopup(false)}
-        className="mt-4 px-6 py-3 bg-blue-600 text-white text-lg font-semibold rounded-xl hover:bg-blue-700"
-      >
-        Închide
-      </button>
-    </div>
-  </div>
-)}
+        <div className="fixed inset-0 bg-[#B1D6FF] bg-opacity-40 flex items-center justify-center z-50">
+          <div className="bg-white p-12 w-[400px] sm:w-[500px] rounded-2xl shadow-2xl text-center space-y-6">
+            <h2 className="text-2xl font-bold text-black-600">Confirmat!</h2>
+            <p className="text-lg text-gray-700">
+              Programare efectuată pentru <br />
+              <strong className="text-xl">{date.toLocaleDateString()}</strong> la{' '}
+              <strong className="text-xl">{selectedHour}</strong>
+            </p>
+            <button
+              onClick={() => router.push('./Appointments')}
+              className="mt-4 px-6 py-3 bg-blue-600 text-white text-lg font-semibold rounded-xl hover:bg-blue-700"
+            >
+              Programarile mele
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

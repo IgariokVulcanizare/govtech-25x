@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation'; // Import useRouter for navigation
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import './SchedulingPage.css';
@@ -70,26 +71,26 @@ const SchedulingPage = () => {
   // Doctor details (unchanged)
   const doctorDetailsByDepartment: { [key: string]: Doctor[] } = {
     Pediatrie: [
-      { name: 'Dr. Tacu Igor', specialty: 'Chirurg pediatru', image: 'igordoc.jpg' },
-      { name: 'Dr. Toderiță Loredana', specialty: 'Asistentă medicală', image: 'loredanadoc.jpg' },
+      { name: 'Dr. Tacu Igor', specialty: 'Chirurg pediatru', image: 'igariok.jpg' },
+      { name: 'Dr. Toderiță Loredana', specialty: 'Asistentă medicală', image: 'lori.jpg' },
       { name: 'Dr. Pancenco Ina', specialty: 'Anesteziolog', image: 'inadoc.jpg' },
       { name: 'Dr. Rusnac Nichita', specialty: 'Terapeut', image: 'nichitadoc.jpg' }
     ],
     Cardiologie: [
-      { name: 'Dr. Tacu Igor', specialty: 'Cardiolog', image: 'igordoc.jpg' },
-      { name: 'Dr. Toderiță Loredana', specialty: 'Asistentă cardiologie', image: 'loredanadoc.jpg' },
+      { name: 'Dr. Tacu Igor', specialty: 'Cardiolog', image: 'igariok.jpg' },
+      { name: 'Dr. Toderiță Loredana', specialty: 'Asistentă cardiologie', image: 'lori.jpg' },
       { name: 'Dr. Pancenco Ina', specialty: 'Anesteziolog', image: 'inadoc.jpg' },
       { name: 'Dr. Rusnac Nichita', specialty: 'Terapeut', image: 'nichitadoc.jpg' }
     ],
     Dermatologie: [
-      { name: 'Dr. Tacu Igor', specialty: 'Dermatolog', image: 'igordoc.jpg' },
-      { name: 'Dr. Toderiță Loredana', specialty: 'Asistentă dermatologie', image: 'loredanadoc.jpg' },
+      { name: 'Dr. Tacu Igor', specialty: 'Dermatolog', image: 'igariok.jpg' },
+      { name: 'Dr. Toderiță Loredana', specialty: 'Asistentă dermatologie', image: 'lori.jpg' },
       { name: 'Dr. Pancenco Ina', specialty: 'Anesteziolog', image: 'inadoc.jpg' },
       { name: 'Dr. Rusnac Nichita', specialty: 'Terapeut', image: 'nichitadoc.jpg' }
     ],
     Ortopedie: [
-      { name: 'Dr. Tacu Igor', specialty: 'Chirurg ortoped', image: 'igordoc.jpg' },
-      { name: 'Dr. Toderiță Loredana', specialty: 'Asistentă ortopedie', image: 'loredanadoc.jpg' },
+      { name: 'Dr. Tacu Igor', specialty: 'Chirurg ortoped', image: 'igariok.jpg' },
+      { name: 'Dr. Toderiță Loredana', specialty: 'Asistentă ortopedie', image: 'lori.jpg' },
       { name: 'Dr. Pancenco Ina', specialty: 'Anesteziolog', image: 'inadoc.jpg' },
       { name: 'Dr. Rusnac Nichita', specialty: 'Terapeut', image: 'nichitadoc.jpg' }
     ]
@@ -102,6 +103,8 @@ const SchedulingPage = () => {
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedHour, setSelectedHour] = useState('');
+
+  const router = useRouter(); // Initialize router
 
   // Available hours logic
   const getAvailableHours = (date: Date): string[] => {
@@ -123,15 +126,10 @@ const SchedulingPage = () => {
 
   const availableHours = selectedDate ? getAvailableHours(selectedDate) : [];
 
-  // Handle "Programează"
+  // Handle "Programează" button click to redirect
   const handleProgramare = () => {
-    alert(`Programare reușită:
-    Oraș: ${selectedCity}
-    Spital: ${selectedHospital}
-    Departament: ${selectedDepartment}
-    Medic: ${selectedDoctor?.name}
-    Data: ${selectedDate?.toLocaleDateString('ro-RO')}
-    Ora: ${selectedHour}`);
+    // Redirect to the Appointments page
+    router.push('./Appointments');
   };
 
   return (
@@ -235,7 +233,6 @@ const SchedulingPage = () => {
                       setSelectedHour('');
                     }}
                   >
-                    {/* Round container for a perfectly round image */}
                     <div className="doctor-avatar">
                       <img
                         src={'/' + doctor.image}
@@ -292,9 +289,7 @@ const SchedulingPage = () => {
                     <button
                       key={hour}
                       onClick={() => setSelectedHour(hour)}
-                      className={`hour-button ${
-                        selectedHour === hour ? 'hour-button--active' : ''
-                      }`}
+                      className={`hour-button ${selectedHour === hour ? 'hour-button--active' : ''}`}
                     >
                       {hour}
                     </button>
@@ -311,7 +306,7 @@ const SchedulingPage = () => {
                   onClick={handleProgramare}
                   className="submit-button mt-auto self-start"
                 >
-                  Programează
+                  Programează-mă
                 </button>
               )}
             </div>
