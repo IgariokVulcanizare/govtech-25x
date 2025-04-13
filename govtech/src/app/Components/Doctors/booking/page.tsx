@@ -1,19 +1,11 @@
 "use client";
 
-import {
-  useRef,
-  useState,
-  useEffect,
-  useMemo,
-  ReactNode
-} from "react";
+import { useRef, useState, useEffect, useMemo, ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { FaRegClock } from "react-icons/fa";
 import { motion, useInView } from "framer-motion";
+import Image from "next/image";
 
-// -------------------------------------------------
-// APPOINTMENT INTERFACE & TYPE DEFS
-// -------------------------------------------------
 interface Appointment {
   id: number;
   doctorName: string;
@@ -50,9 +42,9 @@ const daysOfWeek = [
   "Duminică",
 ];
 
-// -------------------------------------------------
+//
 // AnimatedCard using Framer Motion
-// -------------------------------------------------
+//
 function AnimatedCard({
   children,
   index,
@@ -61,7 +53,6 @@ function AnimatedCard({
   index: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  // triggers true if 50% of item is visible
   const inView = useInView(ref, { amount: 0.5, once: false });
 
   return (
@@ -77,14 +68,13 @@ function AnimatedCard({
   );
 }
 
-// -------------------------------------------------
-// Helpers for date logic
-// -------------------------------------------------
+//
+// Helper functions for date logic
+//
 function padZero(num: number) {
   return num < 10 ? `0${num}` : `${num}`;
 }
 
-// Return "YYYY-MM-DD"
 function toYYYYMMDD(date: Date) {
   const y = date.getFullYear();
   const m = date.getMonth() + 1;
@@ -95,16 +85,14 @@ function toYYYYMMDD(date: Date) {
 function isSunday(date: Date) {
   return date.getDay() === 0; // Sunday=0
 }
+
 function isPast(date: Date) {
   const startOfToday = new Date();
   startOfToday.setHours(0, 0, 0, 0);
   return date < startOfToday;
 }
 
-/**
- * Generate 42 cells (6 weeks x 7 days)
- * for the given year & month, Monday-based
- */
+/** Generate 42 cells (6 weeks x 7 days) for the given year & month, Monday-based */
 function generateCalendarDays(
   year: number,
   month: number
@@ -127,9 +115,7 @@ function generateCalendarDays(
   return result;
 }
 
-// -------------------------------------------------
-// Color-coded appointments in the calendar day
-// -------------------------------------------------
+/** Color-coded label logic for appointments */
 function getColorByDetails(details: string): string {
   switch (details) {
     case "Măsurarea Tensiunii":
@@ -147,7 +133,6 @@ function getColorByDetails(details: string): string {
   }
 }
 
-// -------------------------------------------------
 export default function SchedulingPage() {
   const router = useRouter();
 
@@ -158,10 +143,10 @@ export default function SchedulingPage() {
     return () => clearInterval(timer);
   }, []);
 
-  // Switch among 3 views
+  // View mode state
   const [viewMode, setViewMode] = useState<ViewMode>("appointments");
 
-  // Example appointments (no Sunday appointments)
+  // Example appointments
   const [appointments, setAppointments] = useState<Appointment[]>([
     {
       id: 1,
@@ -289,11 +274,11 @@ export default function SchedulingPage() {
 
   const filteredAppointments = useMemo(() => {
     return appointments.filter((appt) => {
-      // Filter by tab
+      // Filter by tab (if not "Toate")
       if (selectedTab !== "Toate" && appt.status !== selectedTab) {
         return false;
       }
-      // If user clicked on a day in the calendar
+      // If a specific calendar date has been selected, filter by it
       if (selectedCalendarDate) {
         return appt.date === selectedCalendarDate;
       }
@@ -301,7 +286,7 @@ export default function SchedulingPage() {
     });
   }, [appointments, selectedTab, selectedCalendarDate]);
 
-  // Left border color map
+  // Generate left border color map for appointments
   const appointmentStrokeColors = useMemo(() => {
     const colorMap: { [key: number]: string } = {};
     appointments.forEach((appt) => {
@@ -326,12 +311,12 @@ export default function SchedulingPage() {
   }
 
   // ------------------------------------------
-  // Concediu with toggling and confirm
+  // Concediu (vacation) view logic
   // ------------------------------------------
   const [finalConcediuDays, setFinalConcediuDays] = useState<string[]>([]);
   const [tempConcediuDays, setTempConcediuDays] = useState<string[]>([]);
 
-  // If user enters Concediu view, copy final -> temp
+  // When entering "concediu" view, copy final selection into temporary
   useEffect(() => {
     if (viewMode === "concediu") {
       setTempConcediuDays([...finalConcediuDays]);
@@ -346,14 +331,14 @@ export default function SchedulingPage() {
   function toggleTempDay(dateStr: string) {
     setTempConcediuDays((prev) => {
       if (prev.includes(dateStr)) {
-        // unselect
+        // Unselect if already chosen
         return prev.filter((d) => d !== dateStr);
       } else {
         if (prev.length >= 7) {
           alert("Puteți selecta maxim 7 zile de concediu!");
           return prev;
         }
-        // select
+        // Select day
         return [...prev, dateStr];
       }
     });
@@ -403,88 +388,185 @@ export default function SchedulingPage() {
   ];
   const calendarTitle = `${monthsRO[calendarMonth]} ${calendarYear}`;
 
-  // If user clicks "Programări" in sidebar, reset date filter
+  // Reset date filter when showing all appointments
   function showAllAppointments() {
     setViewMode("appointments");
     setSelectedCalendarDate(null);
   }
 
-  // For each date, find appointments to show color-coded labels
+  // Get appointments for a specific calendar date
   function getAppointmentsForDate(date: Date) {
     const dateStr = toYYYYMMDD(date);
     return appointments.filter((appt) => appt.date === dateStr);
   }
 
-  // If we're in normal calendar view, clicking a day => show that day’s appointments
+  // Calendar day click (view mode "calendar")
   function handleCalendarDayClick(date: Date, isGrey: boolean, inMonth: boolean) {
     if (isGrey || !inMonth) return;
     setSelectedCalendarDate(toYYYYMMDD(date));
     setViewMode("appointments");
   }
 
-  // If we're in concediu view, clicking a day => toggle
+  // Calendar day click (view mode "concediu")
   function handleConcediuDayClick(date: Date, isGrey: boolean, inMonth: boolean) {
     if (!inMonth || isGrey) return;
     toggleTempDay(toYYYYMMDD(date));
   }
 
-  // The day is grey if Sunday, Past, or already in finalConcediuDays
+  // Determine if a day should be greyed out (for calendar/concediu view)
   function isDayGrey(date: Date): boolean {
     const dateStr = toYYYYMMDD(date);
-    return (
-      isSunday(date) ||
-      isPast(date) ||
-      finalConcediuDays.includes(dateStr)
-    );
+    return isSunday(date) || isPast(date) || finalConcediuDays.includes(dateStr);
   }
 
-  // ------------------------------------------
-  // NEW: IDNP modal for "Adauga programare"
-  // ------------------------------------------
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [newIdnp, setNewIdnp] = useState("");
+  // ---------------------------
+  // Navbar and Authentication states
+  // ---------------------------
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userRole, setUserRole] = useState<"doctor" | "patient" | null>(null);
+  const [profileOpen, setProfileOpen] = useState(false);
 
-  // Handler to confirm the input & go to Components/Altmedic
-  function handleAddAppointment() {
-    // Here you can do any validation or API call you need with newIdnp
-    // For simplicity, just push to the route:
-    router.push("../../Components/Altmedic");
+  useEffect(() => {
+    const logged = localStorage.getItem("isLoggedIn");
+    const role = localStorage.getItem("userRole");
+    if (logged === "true") {
+      setIsLoggedIn(true);
+      if (role === "doctor") setUserRole("doctor");
+      else setUserRole("patient");
+    }
+  }, []);
+
+  const handleLogoClick = () => {
+    router.push("/");
+  };
+
+  const handleProfileClick = () => {
+    if (!isLoggedIn) {
+      router.push("/Components/Authenthification");
+      return;
+    }
+    setProfileOpen((prev) => !prev);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("userRole");
+    setIsLoggedIn(false);
+    setUserRole(null);
+    setProfileOpen(false);
+    router.push("/");
+  };
+
+  // ------------------------------------------
+  // Modal for "Programează" with "La dvs" / "Către specialist"
+  // ------------------------------------------
+  const [showProgramModal, setShowProgramModal] = useState(false);
+  const [idnpValue, setIdnpValue] = useState("");
+  const [destination, setDestination] = useState<"laTine" | "catreSpecialist" | null>(null);
+
+  function handleIdnpChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const onlyDigits = e.target.value.replace(/\D/g, "");
+    setIdnpValue(onlyDigits);
   }
+
+  function handleProgramConfirm() {
+    if (!destination || !idnpValue.trim()) {
+      alert("Vă rugăm să selectați tipul de programare și să introduceți IDNP!");
+      return;
+    }
+    setShowProgramModal(false);
+
+    if (destination === "laTine") {
+      router.push("../../Components/Doctors/booking/medic");
+    } else {
+      router.push("../../Components/Altmedic");
+    }
+  }
+
+  function handleBackdropClick() {
+    setShowProgramModal(false);
+  }
+
+  const handleProgramareClick = () => {
+    if (!isLoggedIn) {
+      router.push("/Components/Authenthification");
+    } else {
+      setShowProgramModal(true);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-800 flex flex-col">
-      {/* HEADER (minimal spacing) */}
-      <div className="w-[97%] p-4 bg-white rounded-xl shadow mb-2 mx-5 mt-0">
-        <div className="flex items-center justify-between">
-          <div className="ml-7">
-            <img src="/logo2.1.svg" alt="Logo" className="h-12 w-auto" />
-          </div>
-          <div className="flex items-center space-x-4">
-            <div className="text-gray-600 font-medium">
-              {currentTime.toLocaleTimeString("ro-RO")}
+      {/* HEADER / NAVBAR */}
+      <div className="bg-white p-4 shadow-md flex items-center justify-between">
+        {/* Logo */}
+        <div className="pl-4 cursor-pointer" onClick={handleLogoClick}>
+          <Image src="/logo2.1.svg" alt="Logo" width={120} height={50} priority />
+        </div>
+
+        {/* Programează button (centered without invalid margin class) */}
+        <div>
+          <button
+            onClick={handleProgramareClick}
+            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md ml-350"
+          >
+            Programează
+          </button>
+        </div>
+
+        {/* Profile/Login button */}
+        <div className="relative">
+          <button
+            onClick={handleProfileClick}
+            className="bg-white border border-gray-300 rounded-full px-3 py-2 text-black flex items-center gap-2"
+          >
+            {isLoggedIn ? (
+              <>
+                <span>Contul Meu</span>
+                <Image
+                  src="/doctor_asistent.jpg"
+                  alt="Profile"
+                  width={32}
+                  height={32}
+                  className="rounded-full"
+                />
+              </>
+            ) : (
+              <span>Login</span>
+            )}
+          </button>
+          {isLoggedIn && profileOpen && (
+            <div className="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-md py-2 z-10">
+              <button
+                onClick={() => {
+                  if (userRole === "doctor") {
+                    router.push("/Components/Doctors/booking");
+                  } else {
+                    router.push("/Components/Appointments");
+                  }
+                  setProfileOpen(false);
+                }}
+                className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
+              >
+                {userRole === "doctor" ? "Calendar Doctor" : "Programări mele"}
+              </button>
+              <button
+                onClick={handleLogout}
+                className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
+              >
+                Logout
+              </button>
             </div>
-            <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md mr-4">
-              Programează
-            </button>
-            <button className="w-12 h-12">
-              <img
-                src="/doctor_asistent.jpg"
-                alt="Profile"
-                className="w-full h-full rounded-full object-cover"
-              />
-            </button>
-          </div>
+          )}
         </div>
       </div>
+      {/* END NAVBAR */}
 
       {/* SIDEBAR + CONTENT */}
       <div className="flex flex-1 gap-4">
         {/* SIDEBAR */}
-        <div
-          className="w-64 bg-white shadow-2xl p-4 mb-4 ml-5 rounded-xl hidden md:flex flex-col"
-        >
+        <div className="w-64 bg-white shadow-2xl p-4 mb-4 ml-5 rounded-xl hidden md:flex flex-col">
           <div className="flex flex-col flex-1 items-center space-y-4 mt-2">
-            {/* Programari */}
             <button
               className={`w-4/5 py-2 rounded-md ${
                 viewMode === "appointments"
@@ -496,7 +578,6 @@ export default function SchedulingPage() {
               Programări
             </button>
 
-            {/* Calendar */}
             <button
               className={`w-4/5 py-2 rounded-md ${
                 viewMode === "calendar"
@@ -523,9 +604,8 @@ export default function SchedulingPage() {
 
         {/* MAIN CONTENT */}
         {viewMode === "appointments" && (
-          // APPOINTMENTS VIEW
           <div className="flex-1 flex flex-col p-4 md:p-8 relative">
-            {/* Tabs for filter */}
+            {/* Tabs */}
             <div className="flex items-center gap-3 mb-4 ml-8">
               {(["Toate", "Iminente", "Completate", "Anulate"] as Tab[]).map(
                 (tab) => (
@@ -559,7 +639,7 @@ export default function SchedulingPage() {
                       <div
                         className={`relative bg-white rounded-3xl shadow-md border border-gray-100 flex flex-col gap-4 ${randomColorClass} border-l-8`}
                       >
-                        {/* Status indicator */}
+                        {/* Status Indicator */}
                         <div className="absolute top-4 right-6 flex items-center gap-2 text-sm font-medium text-gray-800">
                           <span
                             className={`w-3 h-3 rounded-full ${
@@ -582,7 +662,7 @@ export default function SchedulingPage() {
                           <div className="flex items-start gap-4">
                             <div className="w-[150px] h-[150px]">
                               <img
-                                src={"/" + appt.image}
+                                src={`/${appt.image}`}
                                 alt={appt.doctorName}
                                 className="object-cover w-full h-full rounded-md"
                               />
@@ -622,7 +702,6 @@ export default function SchedulingPage() {
                         {/* Appointment Summary */}
                         <div className="mt-2 border-t pt-4 pb-4 bg-gray-50 px-4 rounded-b-3xl text-gray-600">
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {/* Time Info */}
                             <div className="flex items-center">
                               <FaRegClock className="mr-2 text-gray-500" />
                               <div>
@@ -634,7 +713,6 @@ export default function SchedulingPage() {
                                 </p>
                               </div>
                             </div>
-                            {/* Details */}
                             <div>
                               <p className="font-semibold text-gray-800">
                                 Detalii
@@ -658,7 +736,6 @@ export default function SchedulingPage() {
         )}
 
         {viewMode === "calendar" && (
-          // CALENDAR VIEW
           <div className="flex-1 w-full h-full bg-white p-4 md:p-8 rounded-xl relative flex flex-col">
             {/* Month Navigation */}
             <div className="flex items-center justify-between mb-2">
@@ -679,7 +756,7 @@ export default function SchedulingPage() {
               </button>
             </div>
 
-            {/* Days of week header */}
+            {/* Days Header */}
             <div className="grid grid-cols-7 text-center font-semibold">
               {daysOfWeek.map((dow) => (
                 <div key={dow} className="p-2 text-gray-700">
@@ -688,7 +765,7 @@ export default function SchedulingPage() {
               ))}
             </div>
 
-            {/* 6x7 = 42 day cells */}
+            {/* Calendar Days */}
             <div className="grid grid-cols-7 grid-rows-6 gap-2 w-full h-full">
               {calendarDays.map(({ date, inCurrentMonth }, idx) => {
                 const dayNum = date.getDate();
@@ -720,14 +797,11 @@ export default function SchedulingPage() {
                     onClick={() =>
                       !grey && inCurrentMonth && handleCalendarDayClick(date, grey, inCurrentMonth)
                     }
-                    className={`border rounded flex flex-col items-start p-2
-                      ${
-                        grey
-                          ? "bg-gray-200 text-gray-600 cursor-not-allowed"
-                          : "bg-white hover:bg-gray-100 text-gray-900 cursor-pointer"
-                      }
-                      ${!inCurrentMonth ? "opacity-50" : ""}
-                    `}
+                    className={`border rounded flex flex-col items-start p-2 ${
+                      grey
+                        ? "bg-gray-200 text-gray-600 cursor-not-allowed"
+                        : "bg-white hover:bg-gray-100 text-gray-900 cursor-pointer"
+                    } ${!inCurrentMonth ? "opacity-50" : ""}`}
                   >
                     <div className="font-bold">{dayNum}</div>
                     {labels}
@@ -739,7 +813,6 @@ export default function SchedulingPage() {
         )}
 
         {viewMode === "concediu" && (
-          // CONCEDIU VIEW
           <div className="flex-1 w-full h-full bg-white p-4 md:p-8 rounded-xl relative flex flex-col">
             <div className="flex items-center justify-between mb-2">
               <button
@@ -774,7 +847,6 @@ export default function SchedulingPage() {
               {calendarDays.map(({ date, inCurrentMonth }, idx) => {
                 const dayNum = date.getDate();
                 const dateStr = toYYYYMMDD(date);
-                // Grey if Sunday/past or in finalConcediu
                 const grey = isDayGrey(date);
                 const inTemp = tempConcediuDays.includes(dateStr);
 
@@ -837,40 +909,60 @@ export default function SchedulingPage() {
         )}
       </div>
 
-      {/* Floating circular button in lower-left corner */}
-      <button
-        onClick={() => setIsAddModalOpen(true)}
-        className="fixed bottom-4 right-4 p-4 bg-blue-600 mb-7 mr-10 text-white rounded-full shadow-lg hover:bg-blue-700"
-      >
-        Adauga programare
-      </button>
+      {/* Modal for "Programează" */}
+      {showProgramModal && (
+        <div
+          onClick={handleBackdropClick}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full text-center space-y-4"
+          >
+            <h3 className="text-xl font-semibold mb-2">
+              Unde doriți să programați pacientul?
+            </h3>
 
-      {/* Modal for adding new appointment (IDNP input) */}
-      {isAddModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
-          <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full text-center">
-            <h3 className="mb-4 text-xl font-semibold">Introduceți IDNP</h3>
-            <input
-              type="text"
-              value={newIdnp}
-              onChange={(e) => setNewIdnp(e.target.value)}
-              className="border border-gray-300 px-3 py-2 w-full mb-4 rounded-md"
-              placeholder="IDNP..."
-            />
-            <div className="flex justify-end space-x-2">
+            <div className="flex justify-center gap-4">
               <button
-                onClick={() => setIsAddModalOpen(false)}
-                className="px-4 py-2 rounded-md bg-gray-300 hover:bg-gray-400"
+                className={`px-4 py-2 rounded-md border ${
+                  destination === "laTine"
+                    ? "bg-blue-600 text-white border-blue-600"
+                    : "bg-white text-blue-600 border-blue-600"
+                }`}
+                onClick={() => setDestination("laTine")}
               >
-                Anulează
+                La dvs
               </button>
               <button
-                onClick={handleAddAppointment}
-                className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
+                className={`px-4 py-2 rounded-md border ${
+                  destination === "catreSpecialist"
+                    ? "bg-blue-600 text-white border-blue-600"
+                    : "bg-white text-blue-600 border-blue-600"
+                }`}
+                onClick={() => setDestination("catreSpecialist")}
               >
-                Confirmă
+                Către specialist
               </button>
             </div>
+
+            <div className="text-left mt-2">
+              <label className="block mb-1 text-black font-semibold">IDNP</label>
+              <input
+                type="text"
+                value={idnpValue}
+                onChange={handleIdnpChange}
+                className="border border-gray-300 px-3 py-2 w-full rounded-md"
+                placeholder="Introduceți IDNP (doar cifre)..."
+              />
+            </div>
+
+            <button
+              onClick={handleProgramConfirm}
+              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-md w-full"
+            >
+              Programează
+            </button>
           </div>
         </div>
       )}

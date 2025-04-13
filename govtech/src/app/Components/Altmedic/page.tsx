@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation'; // Import useRouter for navigation
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import './SchedulingPage.css';
@@ -10,6 +10,7 @@ interface Doctor {
   name: string;
   specialty: string;
   image: string;
+  nextAvailableDate: Date; // the earliest day they accept appointments
 }
 
 const SchedulingPage = () => {
@@ -68,35 +69,167 @@ const SchedulingPage = () => {
     'Oncologie'
   ];
 
-  // Doctor details (unchanged)
+  // Example doctor details with nextAvailableDate
   const doctorDetailsByDepartment: { [key: string]: Doctor[] } = {
     Pediatrie: [
-      { name: 'Dr. Tacu Igor', specialty: 'Chirurg pediatru', image: 'igariok.jpg' },
-      { name: 'Dr. Toderiță Loredana', specialty: 'Asistentă medicală', image: 'lori.jpg' },
-      { name: 'Dr. Pancenco Ina', specialty: 'Anesteziolog', image: 'inadoc.jpg' },
-      { name: 'Dr. Rusnac Nichita', specialty: 'Terapeut', image: 'nichitadoc.jpg' }
+      { 
+        name: 'Dr. Tacu Igor', 
+        specialty: 'Chirurg pediatru', 
+        image: 'igariok.jpg',
+        nextAvailableDate: new Date('2025-05-14'), 
+      },
+      { 
+        name: 'Dr. Toderiță Loredana', 
+        specialty: 'Asistentă medicală', 
+        image: 'lori.jpg',
+        nextAvailableDate: new Date('2025-05-15'), 
+      },
+      { 
+        name: 'Dr. Pancenco Ina', 
+        specialty: 'Anesteziolog', 
+        image: 'inadoc.jpg',
+        nextAvailableDate: new Date('2025-05-16'), 
+      },
+      { 
+        name: 'Dr. Rusnac Nichita', 
+        specialty: 'Terapeut', 
+        image: 'nichitadoc.jpg',
+        nextAvailableDate: new Date('2025-05-20'), 
+      }
     ],
     Cardiologie: [
-      { name: 'Dr. Tacu Igor', specialty: 'Cardiolog', image: 'igariok.jpg' },
-      { name: 'Dr. Toderiță Loredana', specialty: 'Asistentă cardiologie', image: 'lori.jpg' },
-      { name: 'Dr. Pancenco Ina', specialty: 'Anesteziolog', image: 'inadoc.jpg' },
-      { name: 'Dr. Rusnac Nichita', specialty: 'Terapeut', image: 'nichitadoc.jpg' }
+      { 
+        name: 'Dr. Popescu Dan', 
+        specialty: 'Cardiolog', 
+        image: 'doctor_asistent.jpg', 
+        nextAvailableDate: new Date('2025-05-10'),
+      },
+      {
+        name: 'Dr. Enache Raluca',
+        specialty: 'Cardiolog intervenționist',
+        image: 'lori.jpg',
+        nextAvailableDate: new Date('2025-05-12'),
+      }
     ],
     Dermatologie: [
-      { name: 'Dr. Tacu Igor', specialty: 'Dermatolog', image: 'igariok.jpg' },
-      { name: 'Dr. Toderiță Loredana', specialty: 'Asistentă dermatologie', image: 'lori.jpg' },
-      { name: 'Dr. Pancenco Ina', specialty: 'Anesteziolog', image: 'inadoc.jpg' },
-      { name: 'Dr. Rusnac Nichita', specialty: 'Terapeut', image: 'nichitadoc.jpg' }
+      { 
+        name: 'Dr. Tacu Igor', 
+        specialty: 'Dermatolog', 
+        image: 'igariok.jpg',
+        nextAvailableDate: new Date('2025-05-14'), 
+      },
+      { 
+        name: 'Dr. Toderiță Loredana', 
+        specialty: 'Asistentă dermatologie', 
+        image: 'lori.jpg',
+        nextAvailableDate: new Date('2025-05-17'), 
+      },
+      { 
+        name: 'Dr. Pancenco Ina', 
+        specialty: 'Anesteziolog', 
+        image: 'inadoc.jpg',
+        nextAvailableDate: new Date('2025-05-19'),
+      },
+      { 
+        name: 'Dr. Rusnac Nichita', 
+        specialty: 'Terapeut', 
+        image: 'nichitadoc.jpg',
+        nextAvailableDate: new Date('2025-05-20'),
+      }
     ],
     Ortopedie: [
-      { name: 'Dr. Tacu Igor', specialty: 'Chirurg ortoped', image: 'igariok.jpg' },
-      { name: 'Dr. Toderiță Loredana', specialty: 'Asistentă ortopedie', image: 'lori.jpg' },
-      { name: 'Dr. Pancenco Ina', specialty: 'Anesteziolog', image: 'inadoc.jpg' },
-      { name: 'Dr. Rusnac Nichita', specialty: 'Terapeut', image: 'nichitadoc.jpg' }
-    ]
+      { 
+        name: 'Dr. Tacu Igor', 
+        specialty: 'Chirurg ortoped', 
+        image: 'igariok.jpg',
+        nextAvailableDate: new Date('2025-05-10'), 
+      },
+      { 
+        name: 'Dr. Toderiță Loredana', 
+        specialty: 'Asistentă ortopedie', 
+        image: 'lori.jpg',
+        nextAvailableDate: new Date('2025-05-12'), 
+      },
+      { 
+        name: 'Dr. Pancenco Ina', 
+        specialty: 'Anesteziolog', 
+        image: 'inadoc.jpg',
+        nextAvailableDate: new Date('2025-05-16'),
+      },
+    ],
+    Ginecologie: [
+      {
+        name: 'Dr. Postolache Livia',
+        specialty: 'Ginecolog specialist',
+        image: 'doctor_asistent.jpg',
+        nextAvailableDate: new Date('2025-06-01'),
+      },
+      {
+        name: 'Dr. Andronic Selina',
+        specialty: 'Obstetrică-Ginecologie',
+        image: 'lori.jpg',
+        nextAvailableDate: new Date('2025-05-22'),
+      }
+    ],
+    Neurologie: [
+      {
+        name: 'Dr. Radu Cristian',
+        specialty: 'Neurolog',
+        image: 'igariok.jpg',
+        nextAvailableDate: new Date('2025-05-18'),
+      },
+      {
+        name: 'Dr. Tanesci Teodor',
+        specialty: 'Neurochirurg',
+        image: 'inadoc.jpg',
+        nextAvailableDate: new Date('2025-06-03'),
+      }
+    ],
+    Psihiatrie: [
+      {
+        name: 'Dr. Balan Maria',
+        specialty: 'Psihiatru',
+        image: 'nichitadoc.jpg',
+        nextAvailableDate: new Date('2025-06-02'),
+      },
+      {
+        name: 'Dr. Cosmescu Adrian',
+        specialty: 'Psiholog consultant',
+        image: 'doctor_asistent.jpg',
+        nextAvailableDate: new Date('2025-05-28'),
+      }
+    ],
+    Oftalmologie: [
+      {
+        name: 'Dr. Luca Aurelia',
+        specialty: 'Oftalmolog',
+        image: 'inadoc.jpg',
+        nextAvailableDate: new Date('2025-05-25'),
+      },
+      {
+        name: 'Dr. Gavril Marius',
+        specialty: 'Oftalmolog pediatric',
+        image: 'nichitadoc.jpg',
+        nextAvailableDate: new Date('2025-06-05'),
+      }
+    ],
+    Oncologie: [
+      {
+        name: 'Dr. Busuioc Cristian',
+        specialty: 'Oncolog',
+        image: 'lori.jpg',
+        nextAvailableDate: new Date('2025-05-30'),
+      },
+      {
+        name: 'Dr. Elefteriu Sorina',
+        specialty: 'Oncolog radioterapie',
+        image: 'doctor_asistent.jpg',
+        nextAvailableDate: new Date('2025-06-01'),
+      }
+    ],
   };
 
-  // State variables
+  // State variables for selections
   const [selectedCity, setSelectedCity] = useState('');
   const [selectedHospital, setSelectedHospital] = useState('');
   const [selectedDepartment, setSelectedDepartment] = useState('');
@@ -104,11 +237,16 @@ const SchedulingPage = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedHour, setSelectedHour] = useState('');
 
-  const router = useRouter(); // Initialize router
+  // Popup state for confirmation
+  const [showPopup, setShowPopup] = useState(false);
+  // Retrieve user role (e.g., 'doctor') from localStorage
+  const [userRole, setUserRole] = useState('');
+  const router = useRouter();
 
-  // Available hours logic
+  // Get available hours for a given date.
   const getAvailableHours = (date: Date): string[] => {
     const now = new Date();
+    // If chosen date is today, only show future hours
     if (
       date.getDate() === now.getDate() &&
       date.getMonth() === now.getMonth() &&
@@ -120,16 +258,44 @@ const SchedulingPage = () => {
         return h > currentHour;
       });
     }
+    // If Sunday => no hours
     if (date.getDay() === 0) return [];
+    // Otherwise show all
     return ['08:00', '10:00', '12:00', '14:00', '16:00'];
   };
 
+  // Recompute available hours whenever selectedDate changes
   const availableHours = selectedDate ? getAvailableHours(selectedDate) : [];
 
-  // Handle "Programează" button click to redirect
+  // Read user role from localStorage on mount.
+  useEffect(() => {
+    const storedRole = localStorage.getItem('userRole');
+    if (storedRole) {
+      setUserRole(storedRole);
+    }
+  }, []);
+
+  // When user selects a new doctor, preselect the date to the doctor's next available date
+  const handleDoctorSelect = (doctor: Doctor) => {
+    setSelectedDoctor(doctor);
+    setSelectedDate(doctor.nextAvailableDate);
+    setSelectedHour('');
+  };
+
+  // Helper to format date (dd.mm.yyyy)
+  function formatDate(dateObj: Date): string {
+    const day = String(dateObj.getDate()).padStart(2, '0');
+    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+    const year = dateObj.getFullYear();
+    return `${day}.${month}.${year}`;
+  }
+
+  // Handle "Programează-mă" button click
   const handleProgramare = () => {
-    // Redirect to the Appointments page
-    router.push('./Appointments');
+    // Show popup if an hour is selected
+    if (selectedHour) {
+      setShowPopup(true);
+    }
   };
 
   return (
@@ -137,7 +303,7 @@ const SchedulingPage = () => {
       <div className="bg-white rounded-2xl p-6 shadow-xl transition-all main-card max-w-8xl mx-[20px]">
         <h1 className="text-3xl font-bold mb-8 text-black">Programare medicală</h1>
 
-        {/* White card for dropdowns (grid layout) */}
+        {/* Dropdown selectors */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {/* City */}
           <div className="md:col-span-2">
@@ -218,34 +384,38 @@ const SchedulingPage = () => {
             <h2 className="text-xl font-semibold mb-4 text-black pt-[35px]">
               Alege un specialist
             </h2>
-
-            {doctorDetailsByDepartment[selectedDepartment] ? (
+            {doctorDetailsByDepartment[selectedDepartment]?.length ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                {doctorDetailsByDepartment[selectedDepartment]?.map((doctor) => (
-                  <div
-                    key={doctor.name}
-                    className={`specialist-card cursor-pointer ${
-                      selectedDoctor?.name === doctor.name ? 'specialist-card--active' : ''
-                    }`}
-                    onClick={() => {
-                      setSelectedDoctor(doctor);
-                      setSelectedDate(null);
-                      setSelectedHour('');
-                    }}
-                  >
-                    <div className="doctor-avatar">
-                      <img
-                        src={'/' + doctor.image}
-                        alt={doctor.name}
-                        className="specialist-image"
-                      />
+                {doctorDetailsByDepartment[selectedDepartment].map((doctor) => {
+                  const isSelected = selectedDoctor?.name === doctor.name;
+                  return (
+                    <div
+                      key={doctor.name}
+                      className={`specialist-card cursor-pointer ${
+                        isSelected ? 'specialist-card--active' : ''
+                      }`}
+                      onClick={() => handleDoctorSelect(doctor)}
+                    >
+                      <div className="doctor-avatar">
+                        <img
+                          src={'/' + doctor.image}
+                          alt={doctor.name}
+                          className="specialist-image"
+                        />
+                      </div>
+                      <div className="specialist-info">
+                        <h4 className="text-black">{doctor.name}</h4>
+                        <p className="text-black">{doctor.specialty}</p>
+                        <p className="text-black font-medium mt-1">
+                          Următoarea disponibilitate: <br />
+                          <span className="font-semibold">
+                            {formatDate(doctor.nextAvailableDate)}
+                          </span>
+                        </p>
+                      </div>
                     </div>
-                    <div className="specialist-info">
-                      <h4 className="text-black">{doctor.name}</h4>
-                      <p className="text-black">{doctor.specialty}</p>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             ) : (
               <p className="text-black">
@@ -264,15 +434,22 @@ const SchedulingPage = () => {
                   setSelectedDate(value as Date);
                   setSelectedHour('');
                 }}
-                value={selectedDate}
+                // Show chosen date, fallback to doctor's nextAvailableDate.
+                value={selectedDate || selectedDoctor.nextAvailableDate}
                 locale="ro-RO"
-                tileDisabled={({ date }) => {
-                  const today = new Date();
-                  return date < today || date.getDay() === 0;
+                tileDisabled={({ date: tileDate }) => {
+                  const docEarliest = new Date(selectedDoctor.nextAvailableDate);
+                  docEarliest.setHours(0, 0, 0, 0);
+                  const tileMidnight = new Date(tileDate);
+                  tileMidnight.setHours(0, 0, 0, 0);
+                  return tileMidnight < docEarliest || tileMidnight.getDay() === 0;
                 }}
-                tileClassName={({ date }) => {
-                  const today = new Date();
-                  if (date < today || date.getDay() === 0) {
+                tileClassName={({ date: tileDate }) => {
+                  const docEarliest = new Date(selectedDoctor.nextAvailableDate);
+                  docEarliest.setHours(0, 0, 0, 0);
+                  const tileMidnight = new Date(tileDate);
+                  tileMidnight.setHours(0, 0, 0, 0);
+                  if (tileMidnight < docEarliest || tileMidnight.getDay() === 0) {
                     return 'text-gray-400 pointer-events-none';
                   }
                   return '';
@@ -280,7 +457,6 @@ const SchedulingPage = () => {
                 className="calendar-container"
               />
             </div>
-
             <div className="w-full md:w-1/2 flex flex-col">
               <h2 className="text-xl font-semibold mb-4 text-black">Ore disponibile</h2>
               {selectedDate && availableHours.length > 0 && (
@@ -289,7 +465,9 @@ const SchedulingPage = () => {
                     <button
                       key={hour}
                       onClick={() => setSelectedHour(hour)}
-                      className={`hour-button ${selectedHour === hour ? 'hour-button--active' : ''}`}
+                      className={`hour-button ${
+                        selectedHour === hour ? 'hour-button--active' : ''
+                      }`}
                     >
                       {hour}
                     </button>
@@ -304,7 +482,7 @@ const SchedulingPage = () => {
               {selectedHour && (
                 <button
                   onClick={handleProgramare}
-                  className="submit-button mt-auto self-start "
+                  className="submit-button mt-10 self-start"
                 >
                   Programează-mă
                 </button>
@@ -313,6 +491,44 @@ const SchedulingPage = () => {
           </div>
         )}
       </div>
+
+      {/* Popup */}
+      {showPopup && (
+        <div className="fixed inset-0 bg-[#B1D6FF] bg-opacity-40 flex items-center justify-center z-50">
+          <div className="bg-white p-12 w-[400px] sm:w-[500px] rounded-2xl shadow-2xl text-center space-y-6">
+            {userRole === 'doctor' ? (
+              <>
+                <h2 className="text-2xl font-bold text-black">
+                  Pacient programat cu succes!
+                </h2>
+                <button
+                  onClick={() => router.push('/Components/Doctors/booking')}
+                  className="mt-4 px-6 py-3 bg-blue-600 text-white text-lg font-semibold rounded-xl hover:bg-blue-700"
+                >
+                  Ok
+                </button>
+              </>
+            ) : (
+              <>
+                <h2 className="text-2xl font-bold text-black">Confirmat!</h2>
+                <p className="text-lg text-black">
+                  Programare efectuată pentru <br />
+                  <strong className="text-xl">
+                    {selectedDate ? selectedDate.toLocaleDateString() : ''}
+                  </strong>{' '}
+                  la <strong className="text-xl">{selectedHour}</strong>
+                </p>
+                <button
+                  onClick={() => router.push('/Components/Appointments')}
+                  className="mt-4 px-6 py-3 bg-blue-600 text-white text-lg font-semibold rounded-xl hover:bg-blue-700"
+                >
+                  Programările mele
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

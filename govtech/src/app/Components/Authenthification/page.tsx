@@ -12,37 +12,29 @@ const mockDatabase = [
     telefon: "0712345678",
     status: "Doctor",
   },
-  // You can add more mock records here...
+  {
+    idnp: "9876543210123",
+    nume: "Ionescu",
+    prenume: "Maria",
+    dataNasterii: "1990-03-05",
+    telefon: "0723456789",
+    status: "Pacient",
+  },
 ];
 
 export default function Authentification() {
-  // ----------------------------
-  // 1. Existing states
-  // ----------------------------
-  // State for QR Code modal (EVO)
-  const [showQRCode, setShowQRCode] = useState(false);
-
-  // State management for form fields
+  // Form fields
   const [idnp, setIdnp] = useState("");
   const [nume, setNume] = useState("");
   const [prenume, setPrenume] = useState("");
   const [dataNasterii, setDataNasterii] = useState("");
   const [telefon, setTelefon] = useState("");
 
-  const router = useRouter();
-
-  // State for MPass loading/success modal
+  // MPass states
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [loadingStep, setLoadingStep] = useState(0);
-
-  // ----------------------------
-  // 2. Add new state for the "role selection" popup
-  // ----------------------------
-  const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
-
-  // Loading messages
   const loadingMessages = [
     "Colectăm datele...",
     "Verificăm informațiile furnizate...",
@@ -50,13 +42,18 @@ export default function Authentification() {
     "Vă rugăm să aveți răbdare, aproape gata!",
   ];
 
-  // ----------------------------
-  // 3. Submit (checks user in mockDatabase)
-  // ----------------------------
+  // Role selection modal (for doctors)
+  const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
+
+  // EVO QR code state
+  const [showQRCode, setShowQRCode] = useState(false);
+
+  const router = useRouter();
+
+  // -------------- FORM SUBMIT --------------
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Simulăm un delay asincron (ca la un apel de rețea)
     await new Promise((resolve) => setTimeout(resolve, 500));
 
     const foundUser = mockDatabase.find(
@@ -68,24 +65,25 @@ export default function Authentification() {
         user.telefon === telefon
     );
 
-    if (foundUser) {
-      // If we found the user:
-      if (foundUser.status === "Doctor") {
-        // Instead of directly pushing to a route,
-        // we open the "role selection" popup for the user to choose:
-        setIsRoleModalOpen(true);
-      } else {
-        // If not a doctor, route to SelectareMedic
-        router.push("./SelectareMedic");
-      }
-    } else {
+    if (!foundUser) {
       alert("Date incorecte. Vă rugăm să verificați și să încercați din nou.");
+      return;
+    }
+
+    // If user is found, we store isLoggedIn in localStorage
+    localStorage.setItem("isLoggedIn", "true");
+    // If "Doctor", we open role selection. If "Pacient," go to patient route
+    if (foundUser.status === "Doctor") {
+      localStorage.setItem("userRole", "doctor");
+      setIsRoleModalOpen(true);
+    } else {
+      // Pacient
+      localStorage.setItem("userRole", "patient");
+      router.push("./SelectareMedic");
     }
   };
 
-  // ----------------------------
-  // 4. Handler for "role selection" from the new modal
-  // ----------------------------
+  // -------------- ROLE SELECTION (for doctors) --------------
   const handleRoleSelection = (selectedRole: "pacient" | "medic") => {
     setIsRoleModalOpen(false);
     if (selectedRole === "medic") {
@@ -97,10 +95,8 @@ export default function Authentification() {
     }
   };
 
-  // ----------------------------
-  // 5. MPass loading logic
-  // ----------------------------
-  const handleAuthClick = async () => {
+  // -------------- MPASS --------------
+  const handleAuthClick = () => {
     setIsModalOpen(true);
     setIsLoading(true);
     setShowSuccess(false);
@@ -113,7 +109,7 @@ export default function Authentification() {
       if (loadingStep < loadingMessages.length - 1) {
         timer = setTimeout(() => {
           setLoadingStep((prev) => prev + 1);
-        }, 3000); // 3 secunde per mesaj
+        }, 3000);
       } else {
         timer = setTimeout(() => {
           setIsLoading(false);
@@ -124,32 +120,28 @@ export default function Authentification() {
     return () => clearTimeout(timer);
   }, [isLoading, loadingStep]);
 
-  // After MPass success, you can route somewhere or do any logic you wish.
+  // When MPass finishes successfully => automatically set patient role => route to patient page
   const handleOk = () => {
     setIsModalOpen(false);
+    // Mark as logged in, role=patient
+    localStorage.setItem("isLoggedIn", "true");
+    localStorage.setItem("userRole", "patient");
+
+    // Then redirect to your patient route
     router.push("./SelectareMedic");
   };
 
-  // ----------------------------
-  // 6. Render
-  // ----------------------------
   return (
     <main className="bg-gray-100 min-h-screen text-black p-8 flex items-center justify-center relative">
-      {/* Container principal – blur dacă e activ modalul de loading/succes or role modal */}
-      <div
-        className={`${
-          isModalOpen || isRoleModalOpen ? "blur-sm pointer-events-none" : ""
-        } transition duration-300 ease-in-out`}
-      >
+      <div className={`${isModalOpen || isRoleModalOpen ? "blur-sm pointer-events-none" : ""} transition duration-300 ease-in-out`}>
         <div className="bg-white w-full max-w-5xl p-8 rounded-md shadow-md grid grid-cols-[1fr_auto_1fr] gap-8">
-          {/* Secțiunea stângă */}
+          {/* LEFT SECTION */}
           <div className="flex flex-col items-start justify-center">
             <h1 className="text-4xl text-center font-bold mb-6 leading-snug w-full">
               Autentifică-te
               <br />
               cu semnătura digitală
             </h1>
-            {/* Butonul MPass */}
             <button
               onClick={handleAuthClick}
               type="button"
@@ -157,7 +149,6 @@ export default function Authentification() {
             >
               MPass
             </button>
-            {/* Butonul EVO */}
             <button
               type="button"
               onClick={() => setShowQRCode(true)}
@@ -167,10 +158,10 @@ export default function Authentification() {
             </button>
           </div>
 
-          {/* Separator vertical */}
+          {/* Separator */}
           <div className="w-[1px] bg-gray-300" />
 
-          {/* Secțiunea dreaptă: Formularul de autentificare */}
+          {/* RIGHT SECTION (Form) */}
           <div className="flex flex-col justify-center">
             <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-sm">
               <div>
@@ -253,7 +244,7 @@ export default function Authentification() {
         </div>
       </div>
 
-      {/* --- Modal pentru feature-ul MPass (încărcare + succes) --- */}
+      {/* MPass loading & success */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full text-center">
@@ -277,11 +268,7 @@ export default function Authentification() {
                     strokeWidth="2"
                     viewBox="0 0 24 24"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M5 13l4 4L19 7"
-                    />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
                 <p className="text-lg font-semibold mb-4">Bine ați venit!</p>
@@ -297,7 +284,7 @@ export default function Authentification() {
         </div>
       )}
 
-      {/* --- Modal pentru codul QR (EVO) --- */}
+      {/* EVO code */}
       {showQRCode && (
         <div className="fixed inset-0 bg-opacity-30 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg relative max-w-sm w-full">
@@ -321,7 +308,7 @@ export default function Authentification() {
         </div>
       )}
 
-      {/* --- Modal pentru "role selection" (doctor => Doctors/booking) --- */}
+      {/* For doctors only: choose "pacient" or "medic" */}
       {isRoleModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/75 backdrop-blur-md">
           <div className="bg-white rounded-lg shadow-xl p-8 max-w-xs w-full text-center">
