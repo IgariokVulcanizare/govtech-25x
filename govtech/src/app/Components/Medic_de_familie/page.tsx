@@ -68,8 +68,8 @@ export default function DoctorScheduleCard() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
-      <div className="bg-white rounded-2xl shadow-xl p-10 flex flex-col lg:flex-row gap-12 w-full max-w-7xl">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
+      <div className="relative bg-white rounded-2xl shadow-xl p-10 flex flex-col lg:flex-row gap-12 w-full max-w-7xl">
         {/* Doctor Info */}
         <div className="w-80 flex flex-col items-center gap-4">
           <img
@@ -77,7 +77,7 @@ export default function DoctorScheduleCard() {
             alt="Doctor Adelina"
             className="w-full h-64 object-cover rounded-xl"
           />
-          <h2 className="text-2xl font-bold text-blue-600">Temciuc Adelina</h2>
+          <h2 className="text-3xl font-bold text-blue-600">Temciuc Adelina</h2>
           <p className="text-lg font-medium text-gray-800">Medic de Familie</p>
         </div>
 
@@ -98,15 +98,15 @@ export default function DoctorScheduleCard() {
           />
 
           {/* Hours */}
-          <div className="flex flex-col gap-4">
-            <h3 className="text-lg font-semibold text-gray-700">
+          <div className="flex flex-col gap-2">
+            <h3 className="text-2xl font-semibold text-gray-700">
               {isSunday
                 ? 'Indisponibil (Duminică)'
                 : `Ore disponibile pentru ${date.toLocaleDateString()}`}
             </h3>
 
             {isSunday ? (
-              <p className="text-red-500">Nu sunt programări disponibile.</p>
+              <p className="text-red-500 text-base">Nu sunt programări disponibile.</p>
             ) : (
               <div className="flex flex-wrap gap-3">
                 {availableHours.map((hour) => (
@@ -128,7 +128,7 @@ export default function DoctorScheduleCard() {
             <button
               onClick={handleBooking}
               disabled={!selectedHour}
-              className={`mt-4 px-6 py-3 text-white font-semibold rounded-xl w-fit
+              className={`bottom-6 right-6  px-6 py-3 text-white font-semibold rounded-xl w-fit absolute
                 ${selectedHour ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-400 cursor-not-allowed'}
               `}
             >
