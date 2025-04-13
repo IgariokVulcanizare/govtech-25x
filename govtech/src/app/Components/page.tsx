@@ -9,7 +9,7 @@ export default function Navbar() {
 
   return (
     // Adjusted width to be 95% of the viewport and maximum width of 1400px for larger screens
-    <nav className="sticky top-7 z-50 w-[95%] max-w-[1450px] mx-auto bg-white rounded-[3vh] p-4 shadow-[0_0_15px_rgba(0,0,0,0.15)] flex items-center justify-between text-blue">
+    <nav className="sticky top-7 z-50 w-full max-w-[1650px] mx-auto bg-white rounded-[3vh] p-4 shadow-[0_0_15px_rgba(0,0,0,0.15)] flex items-center justify-between">
       {/* Logo on the left */}
       <div className="pl-4">
         <Image src="/logo2.1.svg" alt="Logo" width={120} height={50} priority />
