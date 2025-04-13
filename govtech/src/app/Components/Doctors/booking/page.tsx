@@ -5,7 +5,8 @@ import {
   useState,
   useEffect,
   useMemo,
-  ReactNode
+  ReactNode,
+  MouseEventHandler,
 } from "react";
 import { useRouter } from "next/navigation";
 import { FaRegClock } from "react-icons/fa";
@@ -219,8 +220,8 @@ export default function SchedulingPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-800 flex flex-col">
-      {/* TOP HEADER - no extra bottom margin */}
-      <div className="w-[97%] p-4 bg-white rounded-xl shadow mb-0 mx-5 mt-0">
+      {/* TOP HEADER */}
+      <div className="w-[97%] p-4 bg-white rounded-xl shadow mb-8 mx-5 mt-2">
         <div className="flex items-center justify-between">
           <div className="ml-7">
             <img src="/logo.jpg" alt="Logo" className="h-12 w-auto" />
@@ -246,10 +247,10 @@ export default function SchedulingPage() {
 
       {/* SIDEBAR + CONTENT */}
       <div className="flex flex-1 gap-4">
-        {/* SIDEBAR - removed mt-20 */}
+        {/* SIDEBAR */}
         <div
-          className="w-64 bg-white shadow-2xl p-4 mb-8 ml-5 rounded-xl hidden md:flex flex-col"
-          style={{ height: "700px" }}
+          className="w-64 bg-white shadow-2xl p-4 mt-20 mb-8 ml-5 rounded-xl hidden md:flex flex-col"
+          style={{ height: "700px" }} // matching your design
         >
           <div className="flex flex-col flex-1 items-center space-y-4 mt-2">
             {/* Programari */}
@@ -289,12 +290,12 @@ export default function SchedulingPage() {
           )}
         </div>
 
-        {/* MAIN CONTENT - removed mt-12 */}
+        {/* MAIN CONTENT */}
         {viewMode === "appointments" && (
           // ---------------------
           // APPOINTMENTS VIEW
           // ---------------------
-          <div className="flex-1 flex flex-col p-4 md:p-8 relative mt-0">
+          <div className="flex-1 flex flex-col p-4 md:p-8 relative mt-12">
             {/* TABS */}
             <div className="flex items-center gap-3 mb-6 ml-8">
               {(["Toate", "Iminente", "Completate", "Anulate"] as Tab[]).map(
@@ -431,7 +432,7 @@ export default function SchedulingPage() {
           // CALENDAR VIEW
           // ---------------------
           <div
-            className="flex-1 p-4 md:p-8 rounded-xl relative mt-0 bg-white flex flex-col"
+            className="flex-1 p-4 md:p-8 rounded-xl relative mt-12 bg-white flex flex-col"
             style={{ height: "700px" }}
           >
             <h2 className="text-black text-2xl font-semibold">Aprilie 2025</h2>
@@ -479,7 +480,7 @@ export default function SchedulingPage() {
           // CONCEDIU VIEW
           // ---------------------
           <div
-            className="flex-1 p-4 md:p-8 rounded-xl relative mt-0 bg-white flex flex-col"
+            className="flex-1 p-4 md:p-8 rounded-xl relative mt-12 bg-white flex flex-col"
             style={{ height: "700px" }}
           >
             <h2 className="text-black text-2xl font-semibold mb-2">
