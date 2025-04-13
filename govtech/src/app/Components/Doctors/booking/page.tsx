@@ -11,15 +11,15 @@ import { useRouter } from "next/navigation";
 import { FaRegClock } from "react-icons/fa";
 import { motion, useInView } from "framer-motion";
 
-// -------------------------------
+// -------------------------------------------------
 // APPOINTMENT INTERFACE & TYPE DEFS
-// -------------------------------
+// -------------------------------------------------
 interface Appointment {
   id: number;
   doctorName: string;
   doctorSpecialty: string;
-  image: string;
-  date: string;   // "YYYY-MM-DD" format
+  image: string;    // e.g. "andreeapopescu.png"
+  date: string;     // "YYYY-MM-DD" format
   time: string;
   location: string;
   floor: string;
@@ -27,24 +27,32 @@ interface Appointment {
   status: "Iminente" | "Completate" | "Anulate";
   reason?: string;
   nextAvailable?: string;
-  details: string;
+  details: string;  // e.g. "Consultare Medicală"
 }
 
-// border colors for appointments
+// For coloring the left border of Appointment cards
 const strokeColors = ["border-l-blue-500"];
 
-// Tabs for filtering
+// Tabs in "Appointments" view
 type Tab = "Toate" | "Iminente" | "Completate" | "Anulate";
 
-// We add "concediu" as a separate mode
+// View modes for the page
 type ViewMode = "appointments" | "calendar" | "concediu";
 
-// Days of the week row: Monday→Sunday
-const daysOfWeek = ["Luni", "Marți", "Miercuri", "Joi", "Vineri", "Sâmbătă", "Duminică"];
+// Days of week: Monday → Sunday
+const daysOfWeek = [
+  "Luni",
+  "Marți",
+  "Miercuri",
+  "Joi",
+  "Vineri",
+  "Sâmbătă",
+  "Duminică",
+];
 
-// -------------------------------
+// -------------------------------------------------
 // AnimatedCard using Framer Motion
-// -------------------------------
+// -------------------------------------------------
 function AnimatedCard({
   children,
   index,
@@ -53,7 +61,7 @@ function AnimatedCard({
   index: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  // triggers true if 50% of item is visible in scroll area
+  // triggers true if 50% of item is visible
   const inView = useInView(ref, { amount: 0.5, once: false });
 
   return (
@@ -69,16 +77,14 @@ function AnimatedCard({
   );
 }
 
-// -------------------------------
-// Helper for date logic
-// -------------------------------
-
-// Zero-pad function e.g. 2025-04-07
+// -------------------------------------------------
+// Helpers for date logic
+// -------------------------------------------------
 function padZero(num: number) {
   return num < 10 ? `0${num}` : `${num}`;
 }
 
-// Return a "YYYY-MM-DD" string from a Date
+// Return "YYYY-MM-DD"
 function toYYYYMMDD(date: Date) {
   const y = date.getFullYear();
   const m = date.getMonth() + 1;
@@ -86,151 +92,208 @@ function toYYYYMMDD(date: Date) {
   return `${y}-${padZero(m)}-${padZero(d)}`;
 }
 
-// Parse "YYYY-MM-DD" into a Date
-function parseYYYYMMDD(str: string) {
-  const [y, m, d] = str.split("-").map(Number);
-  return new Date(y, m - 1, d); // month is 0-based
+function isSunday(date: Date) {
+  return date.getDay() === 0; // Sunday=0
+}
+function isPast(date: Date) {
+  const startOfToday = new Date();
+  startOfToday.setHours(0, 0, 0, 0);
+  return date < startOfToday;
 }
 
-// Generate an array of 42 cells (6 weeks x 7 days) for the given year & month
-// Returns objects with { date: Date; inCurrentMonth: boolean }
-function generateCalendarDays(year: number, month: number): { date: Date; inCurrentMonth: boolean }[] {
+/**
+ * Generate 42 cells (6 weeks x 7 days)
+ * for the given year & month, Monday-based
+ */
+function generateCalendarDays(
+  year: number,
+  month: number
+): { date: Date; inCurrentMonth: boolean }[] {
   const result: { date: Date; inCurrentMonth: boolean }[] = [];
-
-  // Start of this month
   const firstOfMonth = new Date(year, month, 1);
-  // Monday-based index. In JS, getDay()=0 => Sunday, 1=>Monday, etc.
-  // We'll shift so Monday=0, Tuesday=1... Sunday=6
+  // Monday-based offset
   const dayOfWeek = (firstOfMonth.getDay() + 6) % 7;
-  // dayOfWeek tells how many days from Monday
-
-  // We want the first cell to be Monday of the first row
-  // => subtract dayOfWeek from firstOfMonth
   const startDate = new Date(firstOfMonth);
   startDate.setDate(startDate.getDate() - dayOfWeek);
 
   for (let i = 0; i < 42; i++) {
     const temp = new Date(startDate);
     temp.setDate(startDate.getDate() + i);
-    // Are we in the current month?
-    const inCurrentMonth = temp.getMonth() === month && temp.getFullYear() === year;
-    result.push({ date: temp, inCurrentMonth });
+    result.push({
+      date: temp,
+      inCurrentMonth: temp.getMonth() === month && temp.getFullYear() === year,
+    });
   }
   return result;
 }
 
+// -------------------------------------------------
+// Color-coded appointments in the calendar day
+// -------------------------------------------------
+function getColorByDetails(details: string): string {
+  switch (details) {
+    case "Măsurarea Tensiunii":
+      return "bg-blue-100 text-blue-800";
+    case "Consultare":
+      return "bg-pink-100 text-pink-800";
+    case "Consultare Medicală":
+      return "bg-yellow-100 text-yellow-800";
+    case "Analize":
+      return "bg-green-100 text-green-800";
+    case "Control":
+      return "bg-orange-100 text-orange-800";
+    default:
+      return "bg-gray-100 text-gray-800";
+  }
+}
+
+// -------------------------------------------------
 export default function SchedulingPage() {
   const router = useRouter();
 
-  // Current time display
+  // Current time
   const [currentTime, setCurrentTime] = useState(new Date());
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
     return () => clearInterval(timer);
   }, []);
 
-  // Toggle among the 3 views: appointments, calendar, or concediu
+  // Switch among 3 views
   const [viewMode, setViewMode] = useState<ViewMode>("appointments");
 
-  // EXAMPLE: appointments
+  // Example appointments (no Sunday appointments)
   const [appointments, setAppointments] = useState<Appointment[]>([
     {
       id: 1,
       doctorName: "Dna. Popescu Andreea",
       doctorSpecialty: "Cardiologie",
-      image: "doctor_asistent.jpg",
-      date: "2025-04-15",
+      image: "andreeapopescu.png", // changed from doc_asistent
+      date: "2025-04-14",
       time: "10:30",
       location: "304",
       floor: "Etaj 3",
       waitTime: "~15 min",
       status: "Iminente",
-      nextAvailable: "20 Apr",
-      details: "Consult anual la inimă",
+      details: "Consultare Medicală",
     },
     {
       id: 2,
       doctorName: "D. Ionescu Mihai",
       doctorSpecialty: "Pediatrie",
-      image: "doctor_asistent.jpg",
+      image: "mihaiionescu.png", // changed
       date: "2025-04-17",
       time: "14:00",
       location: "205",
       floor: "Etaj 2",
       waitTime: "~5 min",
       status: "Iminente",
-      nextAvailable: "25 Apr",
-      details: "Verificare tuse copil",
+      details: "Măsurarea Tensiunii",
     },
     {
       id: 3,
       doctorName: "Dna. Georgescu Elena",
       doctorSpecialty: "Internistă",
-      image: "doctor_asistent.jpg",
-      date: "2025-04-10",
-      time: "09:00",
+      image: "doctor_asistent.jpg", // changed
+      date: "2025-05-01",
+      time: "09:30",
       location: "210",
       floor: "Etaj 2",
       waitTime: "~20 min",
       status: "Completate",
-      details: "Analize de rutină",
+      details: "Analize",
     },
     {
       id: 4,
       doctorName: "D. Anton Cosmin",
       doctorSpecialty: "Medicină generală",
-      image: "doctor_asistent.jpg",
-      date: "2025-04-05",
+      image: "antoncosmin.png", // changed
+      date: "2025-05-02",
       time: "11:30",
       location: "320",
       floor: "Etaj 3",
       waitTime: "~25 min",
       status: "Anulate",
       reason: "Pacientul nu s-a prezentat",
-      details: "Control de rutină",
+      details: "Consultare",
     },
     {
       id: 5,
       doctorName: "Dna. Tudorache Maria",
       doctorSpecialty: "Dermatologie",
       image: "doctor_asistent.jpg",
-      date: "2025-05-01",
+      date: "2025-05-06",
       time: "09:00",
       location: "402",
       floor: "Etaj 4",
       waitTime: "~10 min",
       status: "Iminente",
-      details: "Verificare alunițe",
+      details: "Consultare Medicală",
     },
     {
       id: 6,
       doctorName: "D. Popa Cristian",
       doctorSpecialty: "Neurologie",
       image: "doctor_asistent.jpg",
-      date: "2025-05-03",
+      date: "2025-05-08",
       time: "13:30",
       location: "306",
       floor: "Etaj 3",
       waitTime: "~15 min",
       status: "Iminente",
-      details: "Dureri de cap frecvente",
+      details: "Control",
+    },
+    {
+      id: 8,
+      doctorName: "D. Vasile Laurentiu",
+      doctorSpecialty: "ORL",
+      image: "doctor_asistent.jpg",
+      date: "2025-05-15",
+      time: "10:00",
+      location: "125",
+      floor: "Parter",
+      waitTime: "~5 min",
+      status: "Iminente",
+      details: "Control",
+    },
+    {
+      id: 9,
+      doctorName: "Dna. Zaharia Loredana",
+      doctorSpecialty: "Reumatologie",
+      image: "doctor_asistent.jpg",
+      date: "2025-04-25",
+      time: "15:30",
+      location: "308",
+      floor: "Etaj 3",
+      waitTime: "~15 min",
+      status: "Iminente",
+      details: "Măsurarea Tensiunii",
+    },
+    {
+      id: 10,
+      doctorName: "D. Georgescu Mihai",
+      doctorSpecialty: "Oftalmologie",
+      image: "doctor_asistent.jpg",
+      date: "2025-05-28",
+      time: "16:00",
+      location: "205",
+      floor: "Etaj 2",
+      waitTime: "~20 min",
+      status: "Iminente",
+      details: "Consultare",
     },
   ]);
 
-  // Appointment filtering
+  // Filter logic for "Appointments" view
   const [selectedTab, setSelectedTab] = useState<Tab>("Toate");
-
-  // If "selectedCalendarDate" is set, we only show appointments from that date (in "appointments" view).
   const [selectedCalendarDate, setSelectedCalendarDate] = useState<string | null>(null);
 
-  // Filter appointments based on tab + optional selected date
   const filteredAppointments = useMemo(() => {
     return appointments.filter((appt) => {
-      // If status tab is not "Toate", filter by status
+      // Filter by tab
       if (selectedTab !== "Toate" && appt.status !== selectedTab) {
         return false;
       }
-      // If a calendar date is selected, only show that date
+      // If user clicked on a day in the calendar
       if (selectedCalendarDate) {
         return appt.date === selectedCalendarDate;
       }
@@ -238,7 +301,7 @@ export default function SchedulingPage() {
     });
   }, [appointments, selectedTab, selectedCalendarDate]);
 
-  // border color assignment
+  // Left border color map
   const appointmentStrokeColors = useMemo(() => {
     const colorMap: { [key: number]: string } = {};
     appointments.forEach((appt) => {
@@ -248,11 +311,9 @@ export default function SchedulingPage() {
     return colorMap;
   }, [appointments]);
 
-  // Cancel button
-  const handleCancel = (id: number) => {
-    const reason = prompt(
-      "Vă rugăm să specificați motivul pentru care anulați programarea:"
-    );
+  // Cancel appointment
+  function handleCancel(id: number) {
+    const reason = prompt("Vă rugăm să specificați motivul pentru care anulați programarea:");
     if (reason) {
       setAppointments((prev) =>
         prev.map((item) =>
@@ -262,33 +323,52 @@ export default function SchedulingPage() {
         )
       );
     }
-  };
-
-  // ------------------------------------------
-  // CONCEDIU: user can select up to 7 days
-  // We'll store them as "YYYY-MM-DD" strings
-  // ------------------------------------------
-  const [selectedDays, setSelectedDays] = useState<string[]>([]);
-
-  // Instead of toggle, we only "add" if it's not in array (once it's grey, no more click).
-  function addConcediuDay(dateStr: string) {
-    if (selectedDays.length >= 7) {
-      alert("Puteți selecta maxim 7 zile de concediu!");
-      return;
-    }
-    setSelectedDays((prev) => [...prev, dateStr]);
   }
 
   // ------------------------------------------
-  // REAL CALENDAR: navigable months
+  // Concediu with toggling and confirm
+  // ------------------------------------------
+  const [finalConcediuDays, setFinalConcediuDays] = useState<string[]>([]);
+  const [tempConcediuDays, setTempConcediuDays] = useState<string[]>([]);
+
+  // If user enters Concediu view, copy final -> temp
+  useEffect(() => {
+    if (viewMode === "concediu") {
+      setTempConcediuDays([...finalConcediuDays]);
+    }
+  }, [viewMode, finalConcediuDays]);
+
+  function confirmConcediu() {
+    setFinalConcediuDays([...tempConcediuDays]);
+    alert(`Concediu confirmat pentru zilele: ${tempConcediuDays.join(", ")}`);
+  }
+
+  function toggleTempDay(dateStr: string) {
+    setTempConcediuDays((prev) => {
+      if (prev.includes(dateStr)) {
+        // unselect
+        return prev.filter((d) => d !== dateStr);
+      } else {
+        if (prev.length >= 7) {
+          alert("Puteți selecta maxim 7 zile de concediu!");
+          return prev;
+        }
+        // select
+        return [...prev, dateStr];
+      }
+    });
+  }
+
+  // ------------------------------------------
+  // Calendar logic
   // ------------------------------------------
   const now = new Date();
   const [calendarYear, setCalendarYear] = useState(now.getFullYear());
   const [calendarMonth, setCalendarMonth] = useState(now.getMonth()); // 0-based
-
-  const calendarDays = useMemo(() => {
-    return generateCalendarDays(calendarYear, calendarMonth);
-  }, [calendarYear, calendarMonth]);
+  const calendarDays = useMemo(() => generateCalendarDays(calendarYear, calendarMonth), [
+    calendarYear,
+    calendarMonth,
+  ]);
 
   function goPrevMonth() {
     if (calendarMonth === 0) {
@@ -307,60 +387,61 @@ export default function SchedulingPage() {
     }
   }
 
-  // Sunday check
-  function isSunday(date: Date) {
-    return date.getDay() === 0; // 0=Sunday
-  }
-  // Past day check
-  function isPast(date: Date) {
-    const startOfToday = new Date();
-    startOfToday.setHours(0,0,0,0);
-    return date < startOfToday;
-  }
-
-  // For the UI label in the calendar header (e.g. "Aprilie 2025")
   const monthsRO = [
-    "Ianuarie","Februarie","Martie","Aprilie","Mai","Iunie",
-    "Iulie","August","Septembrie","Octombrie","Noiembrie","Decembrie"
+    "Ianuarie",
+    "Februarie",
+    "Martie",
+    "Aprilie",
+    "Mai",
+    "Iunie",
+    "Iulie",
+    "August",
+    "Septembrie",
+    "Octombrie",
+    "Noiembrie",
+    "Decembrie",
   ];
   const calendarTitle = `${monthsRO[calendarMonth]} ${calendarYear}`;
 
-  // The user requested: "fa sa nu pot apasa pe casutele sure deloc" => 
-  // We'll define grey if: Sunday, Past day, or (Concediu=already selected).
-  function isGrey(date: Date): boolean {
-    const dateStr = toYYYYMMDD(date);
-    return isSunday(date) || isPast(date) || selectedDays.includes(dateStr);
-  }
-
-  // On day click in "calendar" view
-  function handleCalendarDayClick(cellDate: Date, isGreyCell: boolean, inCurrentMonth: boolean) {
-    // If cell is grey or not in this month, do nothing
-    if (isGreyCell || !inCurrentMonth) return;
-
-    // Otherwise, jump to appointments for that date
-    setSelectedCalendarDate(toYYYYMMDD(cellDate));
-    setViewMode("appointments");
-  }
-
-  // On day click in "concediu" view
-  function handleConcediuDayClick(cellDate: Date, isGreyCell: boolean, inCurrentMonth: boolean) {
-    // If cell is grey or not in this month, do nothing
-    if (isGreyCell || !inCurrentMonth) return;
-
-    // Otherwise, add to selectedDays
-    addConcediuDay(toYYYYMMDD(cellDate));
-  }
-
-  // If user clicks "Programări" in sidebar, show all appointments
+  // If user clicks "Programări" in sidebar, reset date filter
   function showAllAppointments() {
     setViewMode("appointments");
-    setSelectedCalendarDate(null); // reset date filter
+    setSelectedCalendarDate(null);
+  }
+
+  // For each date, find appointments to show color-coded labels
+  function getAppointmentsForDate(date: Date) {
+    const dateStr = toYYYYMMDD(date);
+    return appointments.filter((appt) => appt.date === dateStr);
+  }
+
+  // If we're in normal calendar view, clicking a day => show that day’s appointments
+  function handleCalendarDayClick(date: Date, isGrey: boolean, inMonth: boolean) {
+    if (isGrey || !inMonth) return;
+    setSelectedCalendarDate(toYYYYMMDD(date));
+    setViewMode("appointments");
+  }
+
+  // If we're in concediu view, clicking a day => toggle
+  function handleConcediuDayClick(date: Date, isGrey: boolean, inMonth: boolean) {
+    if (!inMonth || isGrey) return;
+    toggleTempDay(toYYYYMMDD(date));
+  }
+
+  // The day is grey if Sunday, Past, or already in finalConcediuDays
+  function isDayGrey(date: Date): boolean {
+    const dateStr = toYYYYMMDD(date);
+    return (
+      isSunday(date) ||
+      isPast(date) ||
+      finalConcediuDays.includes(dateStr)
+    );
   }
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-800 flex flex-col">
-      {/* TOP HEADER */}
-      <div className="w-[97%] p-4 bg-white rounded-xl shadow mb-8 mx-5 mt-2">
+      {/* HEADER (minimal spacing) */}
+      <div className="w-[97%] p-4 bg-white rounded-xl shadow mb-2 mx-5 mt-0">
         <div className="flex items-center justify-between">
           <div className="ml-7">
             <img src="/logo.jpg" alt="Logo" className="h-12 w-auto" />
@@ -387,8 +468,7 @@ export default function SchedulingPage() {
       <div className="flex flex-1 gap-4">
         {/* SIDEBAR */}
         <div
-          className="w-64 bg-white shadow-2xl p-4 mt-20 mb-8 ml-5 rounded-xl hidden md:flex flex-col"
-          style={{ height: "700px" }}
+          className="w-64 bg-white shadow-2xl p-4 mb-4 ml-5 rounded-xl hidden md:flex flex-col"
         >
           <div className="flex flex-col flex-1 items-center space-y-4 mt-2">
             {/* Programari */}
@@ -402,6 +482,7 @@ export default function SchedulingPage() {
             >
               Programări
             </button>
+
             {/* Calendar */}
             <button
               className={`w-4/5 py-2 rounded-md ${
@@ -415,7 +496,6 @@ export default function SchedulingPage() {
             </button>
           </div>
 
-          {/* Concediu button pinned to bottom, visible only if in "calendar" mode */}
           {viewMode === "calendar" && (
             <div className="mt-auto flex justify-center">
               <button
@@ -430,12 +510,10 @@ export default function SchedulingPage() {
 
         {/* MAIN CONTENT */}
         {viewMode === "appointments" && (
-          // ---------------------
           // APPOINTMENTS VIEW
-          // ---------------------
-          <div className="flex-1 flex flex-col p-4 md:p-8 relative mt-12">
-            {/* TABS */}
-            <div className="flex items-center gap-3 mb-6 ml-8">
+          <div className="flex-1 flex flex-col p-4 md:p-8 relative">
+            {/* Tabs for filter */}
+            <div className="flex items-center gap-3 mb-4 ml-8">
               {(["Toate", "Iminente", "Completate", "Anulate"] as Tab[]).map(
                 (tab) => (
                   <button
@@ -453,7 +531,6 @@ export default function SchedulingPage() {
               )}
             </div>
 
-            {/* SCROLLABLE list of appointments */}
             <div className="max-h-[550px] overflow-y-auto pr-2">
               <div className="flex flex-col gap-6">
                 {filteredAppointments.length === 0 && (
@@ -488,7 +565,7 @@ export default function SchedulingPage() {
                         </div>
 
                         <div className="flex flex-col md:flex-row w-full justify-between items-start gap-4 px-4 pt-4">
-                          {/* DOCTOR INFO */}
+                          {/* Doctor Info */}
                           <div className="flex items-start gap-4">
                             <div className="w-[150px] h-[150px]">
                               <img
@@ -507,7 +584,7 @@ export default function SchedulingPage() {
                             </div>
                           </div>
 
-                          {/* ACTION BUTTONS */}
+                          {/* Action Buttons */}
                           <div className="mb-4 md:mb-0 md:mr-4 flex gap-2 self-end">
                             <button
                               className="px-3 py-2 bg-white text-blue-700 border border-blue-700 rounded-md hover:bg-blue-50"
@@ -527,7 +604,7 @@ export default function SchedulingPage() {
                           </div>
                         </div>
 
-                        {/* APPOINTMENT SUMMARY */}
+                        {/* Appointment Summary */}
                         <div className="mt-2 border-t pt-4 pb-4 bg-gray-50 px-4 rounded-b-3xl text-gray-600">
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {/* Time Info */}
@@ -566,15 +643,10 @@ export default function SchedulingPage() {
         )}
 
         {viewMode === "calendar" && (
-          // ---------------------
-          // CALENDAR VIEW
-          // ---------------------
-          <div
-            className="flex-1 p-4 md:p-8 rounded-xl relative mt-12 bg-white flex flex-col"
-            style={{ height: "700px" }}
-          >
+          // CALENDAR VIEW: big white boxes filling the screen
+          <div className="flex-1 w-full h-full bg-white p-4 md:p-8 rounded-xl relative flex flex-col">
             {/* Month Navigation */}
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between mb-2">
               <button
                 onClick={goPrevMonth}
                 className="px-3 py-1 border rounded hover:bg-gray-100"
@@ -593,7 +665,7 @@ export default function SchedulingPage() {
             </div>
 
             {/* Days of week header */}
-            <div className="grid grid-cols-7 mt-6 text-center font-semibold">
+            <div className="grid grid-cols-7 text-center font-semibold">
               {daysOfWeek.map((dow) => (
                 <div key={dow} className="p-2 text-gray-700">
                   {dow}
@@ -601,30 +673,49 @@ export default function SchedulingPage() {
               ))}
             </div>
 
-            {/* The 6 rows x 7 columns (42 cells) */}
-            <div className="grid grid-cols-7 grid-rows-6 gap-2 mt-1 flex-1">
+            {/* 6x7 = 42 day cells, each big white box */}
+            <div className="grid grid-cols-7 grid-rows-6 gap-2 w-full h-full">
               {calendarDays.map(({ date, inCurrentMonth }, idx) => {
-                const dateStr = toYYYYMMDD(date);
-                const grey = isGrey(date);
                 const dayNum = date.getDate();
+                const dateStr = toYYYYMMDD(date);
+                // Grey if Sunday, Past, or final-concediu day
+                const grey = isSunday(date) || isPast(date) || finalConcediuDays.includes(dateStr);
+
+                // Show color-coded appointment chips
+                const dayAppointments = appointments.filter(a => a.date === dateStr);
+                const labels = dayAppointments.map(appt => {
+                  const c = getColorByDetails(appt.details);
+                  return (
+                    <div
+                      key={appt.id}
+                      className={`text-xs px-1 py-0.5 rounded-md mt-1 ${c}`}
+                      style={{
+                        maxWidth: "100%",
+                        whiteSpace: "nowrap",
+                        textOverflow: "ellipsis",
+                        overflow: "hidden"
+                      }}
+                    >
+                      {appt.details}
+                    </div>
+                  );
+                });
 
                 return (
                   <div
                     key={idx}
-                    // if grey or not in currentMonth => no click
-                    onClick={() => handleCalendarDayClick(date, grey, inCurrentMonth)}
-                    className={`border rounded p-2 flex flex-col items-center justify-center text-sm 
+                    onClick={() => !grey && inCurrentMonth && handleCalendarDayClick(date, grey, inCurrentMonth)}
+                    className={`border rounded flex flex-col items-start p-2
                       ${
                         grey
                           ? "bg-gray-200 text-gray-600 cursor-not-allowed"
                           : "bg-white hover:bg-gray-100 text-gray-900 cursor-pointer"
                       }
-                      ${
-                        !inCurrentMonth ? "opacity-50" : ""
-                      }
+                      ${!inCurrentMonth ? "opacity-50" : ""}
                     `}
                   >
-                    {dayNum}
+                    <div className="font-bold">{dayNum}</div>
+                    {labels}
                   </div>
                 );
               })}
@@ -633,15 +724,9 @@ export default function SchedulingPage() {
         )}
 
         {viewMode === "concediu" && (
-          // ---------------------
           // CONCEDIU VIEW
-          // ---------------------
-          <div
-            className="flex-1 p-4 md:p-8 rounded-xl relative mt-12 bg-white flex flex-col"
-            style={{ height: "700px" }}
-          >
-            {/* Month Navigation */}
-            <div className="flex items-center justify-between">
+          <div className="flex-1 w-full h-full bg-white p-4 md:p-8 rounded-xl relative flex flex-col">
+            <div className="flex items-center justify-between mb-2">
               <button
                 onClick={goPrevMonth}
                 className="px-3 py-1 border rounded hover:bg-gray-100"
@@ -658,13 +743,11 @@ export default function SchedulingPage() {
                 Luna următoare &gt;
               </button>
             </div>
-            <p className="text-gray-700 mb-4 mt-2">
-              Selectați zilele dorite (maxim 7). Vor fi colorate automat în gri
-              și nu mai pot fi deselectate.
+            <p className="text-gray-700 mb-2 mt-1">
+              Selectați/deselectați zilele (maxim 7). Se aplică doar după confirmare.
             </p>
 
-            {/* Days of week header */}
-            <div className="grid grid-cols-7 mt-2 text-center font-semibold">
+            <div className="grid grid-cols-7 text-center font-semibold">
               {daysOfWeek.map((dow) => (
                 <div key={dow} className="p-2 text-gray-700">
                   {dow}
@@ -672,33 +755,58 @@ export default function SchedulingPage() {
               ))}
             </div>
 
-            <div className="grid grid-cols-7 grid-rows-6 gap-2 flex-1 mt-2">
+            <div className="grid grid-cols-7 grid-rows-6 gap-2 w-full h-full">
               {calendarDays.map(({ date, inCurrentMonth }, idx) => {
-                const dateStr = toYYYYMMDD(date);
-                const grey = isGrey(date);
                 const dayNum = date.getDate();
+                const dateStr = toYYYYMMDD(date);
+                // Grey if Sunday/past or in finalConcediu
+                const grey = isSunday(date) || isPast(date) || finalConcediuDays.includes(dateStr);
+                // is in temp
+                const inTemp = tempConcediuDays.includes(dateStr);
+
+                // If you also want color-coded labels in concediu
+                const dayAppointments = appointments.filter(a => a.date === dateStr);
+                const labels = dayAppointments.map(appt => {
+                  const c = getColorByDetails(appt.details);
+                  return (
+                    <div
+                      key={appt.id}
+                      className={`text-xs px-1 py-0.5 rounded-md mt-1 ${c}`}
+                      style={{
+                        maxWidth: "100%",
+                        whiteSpace: "nowrap",
+                        textOverflow: "ellipsis",
+                        overflow: "hidden"
+                      }}
+                    >
+                      {appt.details}
+                    </div>
+                  );
+                });
+
+                let cellStyle = "";
+                if (!inCurrentMonth) {
+                  cellStyle += " opacity-50";
+                }
+                if (grey) {
+                  cellStyle += " bg-gray-200 text-gray-600 cursor-not-allowed";
+                } else if (inTemp) {
+                  cellStyle += " bg-blue-200 text-blue-900 cursor-pointer";
+                } else {
+                  cellStyle += " bg-white hover:bg-gray-100 text-gray-900 cursor-pointer";
+                }
 
                 return (
                   <div
                     key={idx}
                     onClick={() => {
-                      // if grey or not in month => do nothing
-                      if (!grey && inCurrentMonth) {
-                        addConcediuDay(dateStr);
-                      }
+                      if (!inCurrentMonth || grey) return;
+                      toggleTempDay(dateStr);
                     }}
-                    className={`border rounded p-2 flex flex-col items-center justify-center text-sm 
-                      ${
-                        grey
-                          ? "bg-gray-200 text-gray-600 cursor-not-allowed"
-                          : "bg-white hover:bg-gray-100 text-gray-900 cursor-pointer"
-                      }
-                      ${
-                        !inCurrentMonth ? "opacity-50" : ""
-                      }
-                    `}
+                    className={`border rounded flex flex-col items-start p-2 ${cellStyle}`}
                   >
-                    {dayNum}
+                    <div className="font-bold">{dayNum}</div>
+                    {labels}
                   </div>
                 );
               })}
@@ -706,11 +814,7 @@ export default function SchedulingPage() {
 
             <div className="mt-4">
               <button
-                onClick={() =>
-                  alert(
-                    `Ați selectat următoarele zile: ${selectedDays.join(", ")}`
-                  )
-                }
+                onClick={confirmConcediu}
                 className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
               >
                 Confirmă Concediu
