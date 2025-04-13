@@ -14,21 +14,21 @@ const MyPage = () => {
       className="min-h-screen bg-[#B1D6FF] flex items-center justify-center"
       style={{ fontFamily: "Roboto, sans-serif" }}
     >
-      <div className="relative w-[90%] max-w-8xl bg-white rounded-[3.25vh] -mt-19 mb-8 h-[65vh] flex flex-col md:flex-row">
+      <div className="relative w-[90%] max-w-8xl bg-white rounded-[3.25vh] -mt-19 mb-8 h-[70vh] flex flex-col md:flex-row px-20">
         
         {/* Text Section */}
-        <div className="w-full md:w-1/2 flex flex-col justify-center p-8">
-          <h1 className="text-7xl font-bold text-black mb-6 ml-15 leading-[1.2]">
+        <div className="w-full md:w-1/3 flex flex-col justify-center">
+          <h1 className="text-7xl font-bold text-black mb-6 leading-[1.2]">
             Selectează o opțiune pentru a începe programarea.
           </h1>
-          <h6 className="text-3xl text-black mb-6 ml-15 leading-[1.2]">
+          <h6 className="text-2xl text-black mb-6 leading-[1.2]">
             Ai nevoie de un medic de familie sau un specialist?
           </h6>
         </div>
 
         {/* Two Rectangles Section */}
-        <div className="w-full md:w-1/2 flex items-center justify-center p-8">
-          <div className="flex flex-col md:flex-row gap-8">
+        <div className=" md:w-2/3 flex items-center justify-center">
+          <div className="flex flex-col md:flex-row gap-20">
 
             {/* First Rectangle */}
             <div className="bg-white border border-gray-300 shadow-md rounded-3xl p-6 w-[400px] h-[480px] flex flex-col">
