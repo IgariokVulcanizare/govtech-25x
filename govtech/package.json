@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@lottiefiles/dotlottie-react": "^0.13.3",
+    "framer-motion": "^12.6.5",
     "next": "15.2.4",
     "openai": "^4.93.0",
     "react": "^19.0.0",
