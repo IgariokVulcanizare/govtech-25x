@@ -18,7 +18,7 @@ export default function Navbar() {
       {/* Navigation links for medium+ screens */}
       <div className="hidden md:flex items-center pr-4 gap-11 text-black text-xl font-large">
         <Link
-          href="/programare"
+          href="/Components/Authenthification"
           className="px-6 py-3 rounded-full border-2 border-transparent text-black transition-all duration-300 ease-in-out hover:border-[#C0DDFF]"
         >
           Programare

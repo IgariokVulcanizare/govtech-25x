@@ -166,8 +166,8 @@ export default function SchedulingPage() {
     {
       id: 1,
       doctorName: "Dna. Popescu Andreea",
-      doctorSpecialty: "Cardiologie",
-      image: "andreeapopescu.png", // changed from doc_asistent
+      doctorSpecialty: "",
+      image: "andreeapopescu.png",
       date: "2025-04-14",
       time: "10:30",
       location: "304",
@@ -179,8 +179,8 @@ export default function SchedulingPage() {
     {
       id: 2,
       doctorName: "D. Ionescu Mihai",
-      doctorSpecialty: "Pediatrie",
-      image: "mihaiionescu.png", // changed
+      doctorSpecialty: "",
+      image: "mihaiionescu.png",
       date: "2025-04-17",
       time: "14:00",
       location: "205",
@@ -192,8 +192,8 @@ export default function SchedulingPage() {
     {
       id: 3,
       doctorName: "Dna. Georgescu Elena",
-      doctorSpecialty: "Internistă",
-      image: "doctor_asistent.jpg", // changed
+      doctorSpecialty: "",
+      image: "doctor_asistent.jpg",
       date: "2025-05-01",
       time: "09:30",
       location: "210",
@@ -205,8 +205,8 @@ export default function SchedulingPage() {
     {
       id: 4,
       doctorName: "D. Anton Cosmin",
-      doctorSpecialty: "Medicină generală",
-      image: "antoncosmin.png", // changed
+      doctorSpecialty: "",
+      image: "antoncosmin.png",
       date: "2025-05-02",
       time: "11:30",
       location: "320",
@@ -219,7 +219,7 @@ export default function SchedulingPage() {
     {
       id: 5,
       doctorName: "Dna. Tudorache Maria",
-      doctorSpecialty: "Dermatologie",
+      doctorSpecialty: "",
       image: "doctor_asistent.jpg",
       date: "2025-05-06",
       time: "09:00",
@@ -232,7 +232,7 @@ export default function SchedulingPage() {
     {
       id: 6,
       doctorName: "D. Popa Cristian",
-      doctorSpecialty: "Neurologie",
+      doctorSpecialty: "",
       image: "doctor_asistent.jpg",
       date: "2025-05-08",
       time: "13:30",
@@ -245,7 +245,7 @@ export default function SchedulingPage() {
     {
       id: 8,
       doctorName: "D. Vasile Laurentiu",
-      doctorSpecialty: "ORL",
+      doctorSpecialty: "",
       image: "doctor_asistent.jpg",
       date: "2025-05-15",
       time: "10:00",
@@ -258,7 +258,7 @@ export default function SchedulingPage() {
     {
       id: 9,
       doctorName: "Dna. Zaharia Loredana",
-      doctorSpecialty: "Reumatologie",
+      doctorSpecialty: "",
       image: "doctor_asistent.jpg",
       date: "2025-04-25",
       time: "15:30",
@@ -271,7 +271,7 @@ export default function SchedulingPage() {
     {
       id: 10,
       doctorName: "D. Georgescu Mihai",
-      doctorSpecialty: "Oftalmologie",
+      doctorSpecialty: "",
       image: "doctor_asistent.jpg",
       date: "2025-05-28",
       time: "16:00",
@@ -365,10 +365,10 @@ export default function SchedulingPage() {
   const now = new Date();
   const [calendarYear, setCalendarYear] = useState(now.getFullYear());
   const [calendarMonth, setCalendarMonth] = useState(now.getMonth()); // 0-based
-  const calendarDays = useMemo(() => generateCalendarDays(calendarYear, calendarMonth), [
-    calendarYear,
-    calendarMonth,
-  ]);
+  const calendarDays = useMemo(
+    () => generateCalendarDays(calendarYear, calendarMonth),
+    [calendarYear, calendarMonth]
+  );
 
   function goPrevMonth() {
     if (calendarMonth === 0) {
@@ -438,13 +438,26 @@ export default function SchedulingPage() {
     );
   }
 
+  // ------------------------------------------
+  // NEW: IDNP modal for "Adauga programare"
+  // ------------------------------------------
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [newIdnp, setNewIdnp] = useState("");
+
+  // Handler to confirm the input & go to Components/Altmedic
+  function handleAddAppointment() {
+    // Here you can do any validation or API call you need with newIdnp
+    // For simplicity, just push to the route:
+    router.push("../../Components/Altmedic");
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 text-gray-800 flex flex-col">
       {/* HEADER (minimal spacing) */}
       <div className="w-[97%] p-4 bg-white rounded-xl shadow mb-2 mx-5 mt-0">
         <div className="flex items-center justify-between">
           <div className="ml-7">
-            <img src="/logo.jpg" alt="Logo" className="h-12 w-auto" />
+            <img src="/logo2.1.svg" alt="Logo" className="h-12 w-auto" />
           </div>
           <div className="flex items-center space-x-4">
             <div className="text-gray-600 font-medium">
@@ -588,7 +601,9 @@ export default function SchedulingPage() {
                           <div className="mb-4 md:mb-0 md:mr-4 flex gap-2 self-end">
                             <button
                               className="px-3 py-2 bg-white text-blue-700 border border-blue-700 rounded-md hover:bg-blue-50"
-                              onClick={() => alert("Funcționalitate Reprogramează")}
+                              onClick={() =>
+                                alert("Funcționalitate Reprogramează")
+                              }
                             >
                               Reprogramează
                             </button>
@@ -643,7 +658,7 @@ export default function SchedulingPage() {
         )}
 
         {viewMode === "calendar" && (
-          // CALENDAR VIEW: big white boxes filling the screen
+          // CALENDAR VIEW
           <div className="flex-1 w-full h-full bg-white p-4 md:p-8 rounded-xl relative flex flex-col">
             {/* Month Navigation */}
             <div className="flex items-center justify-between mb-2">
@@ -673,17 +688,15 @@ export default function SchedulingPage() {
               ))}
             </div>
 
-            {/* 6x7 = 42 day cells, each big white box */}
+            {/* 6x7 = 42 day cells */}
             <div className="grid grid-cols-7 grid-rows-6 gap-2 w-full h-full">
               {calendarDays.map(({ date, inCurrentMonth }, idx) => {
                 const dayNum = date.getDate();
                 const dateStr = toYYYYMMDD(date);
-                // Grey if Sunday, Past, or final-concediu day
                 const grey = isSunday(date) || isPast(date) || finalConcediuDays.includes(dateStr);
+                const dayAppointments = getAppointmentsForDate(date);
 
-                // Show color-coded appointment chips
-                const dayAppointments = appointments.filter(a => a.date === dateStr);
-                const labels = dayAppointments.map(appt => {
+                const labels = dayAppointments.map((appt) => {
                   const c = getColorByDetails(appt.details);
                   return (
                     <div
@@ -704,7 +717,9 @@ export default function SchedulingPage() {
                 return (
                   <div
                     key={idx}
-                    onClick={() => !grey && inCurrentMonth && handleCalendarDayClick(date, grey, inCurrentMonth)}
+                    onClick={() =>
+                      !grey && inCurrentMonth && handleCalendarDayClick(date, grey, inCurrentMonth)
+                    }
                     className={`border rounded flex flex-col items-start p-2
                       ${
                         grey
@@ -760,13 +775,11 @@ export default function SchedulingPage() {
                 const dayNum = date.getDate();
                 const dateStr = toYYYYMMDD(date);
                 // Grey if Sunday/past or in finalConcediu
-                const grey = isSunday(date) || isPast(date) || finalConcediuDays.includes(dateStr);
-                // is in temp
+                const grey = isDayGrey(date);
                 const inTemp = tempConcediuDays.includes(dateStr);
 
-                // If you also want color-coded labels in concediu
-                const dayAppointments = appointments.filter(a => a.date === dateStr);
-                const labels = dayAppointments.map(appt => {
+                const dayAppointments = getAppointmentsForDate(date);
+                const labels = dayAppointments.map((appt) => {
                   const c = getColorByDetails(appt.details);
                   return (
                     <div
@@ -801,7 +814,7 @@ export default function SchedulingPage() {
                     key={idx}
                     onClick={() => {
                       if (!inCurrentMonth || grey) return;
-                      toggleTempDay(dateStr);
+                      handleConcediuDayClick(date, grey, inCurrentMonth);
                     }}
                     className={`border rounded flex flex-col items-start p-2 ${cellStyle}`}
                   >
@@ -823,6 +836,44 @@ export default function SchedulingPage() {
           </div>
         )}
       </div>
+
+      {/* Floating circular button in lower-left corner */}
+      <button
+        onClick={() => setIsAddModalOpen(true)}
+        className="fixed bottom-4 right-4 p-4 bg-blue-600 mb-7 mr-10 text-white rounded-full shadow-lg hover:bg-blue-700"
+      >
+        Adauga programare
+      </button>
+
+      {/* Modal for adding new appointment (IDNP input) */}
+      {isAddModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full text-center">
+            <h3 className="mb-4 text-xl font-semibold">Introduceți IDNP</h3>
+            <input
+              type="text"
+              value={newIdnp}
+              onChange={(e) => setNewIdnp(e.target.value)}
+              className="border border-gray-300 px-3 py-2 w-full mb-4 rounded-md"
+              placeholder="IDNP..."
+            />
+            <div className="flex justify-end space-x-2">
+              <button
+                onClick={() => setIsAddModalOpen(false)}
+                className="px-4 py-2 rounded-md bg-gray-300 hover:bg-gray-400"
+              >
+                Anulează
+              </button>
+              <button
+                onClick={handleAddAppointment}
+                className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
+              >
+                Confirmă
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
